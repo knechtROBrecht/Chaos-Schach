@@ -1,6 +1,8 @@
 package game;
 
-public class GameField{
+import java.awt.Color;
+
+public class GameField {
 
 	private GameField upperRight;
 	private GameField lowerRight;
@@ -9,13 +11,28 @@ public class GameField{
 	private GameField upperLeft;
 	private GameField up;
 	private int difficulty = 1;
-	private  int x;
-	private  int y;
+	private int x;
+	private int y;
 	private GamePiece gamePiece;
+	private int type;
+	private String name;
+	private Color color;
 
-	public GameField(int x, int y) {
+	public GameField(int x, int y, int type) {
 		this.x = x;
 		this.y = y;
+		this.type = type;
+		if (type == 0) {
+			initialize(Color.yellow, 1, "Plane");
+		} else if (type == 1) {
+			initialize(Color.darkGray, 2, "Swamp");
+		}
+	}
+
+	private void initialize(Color color, int difficulty, String name) {
+		this.setColor(color);
+		this.difficulty = difficulty;
+		this.setName(name);
 	}
 
 	public int getX() {
@@ -25,7 +42,7 @@ public class GameField{
 	public int getY() {
 		return y;
 	}
-	
+
 	public int getDifficulty() {
 		return difficulty;
 	}
@@ -37,7 +54,7 @@ public class GameField{
 	public GamePiece getPiece() {
 		return gamePiece;
 	}
-	
+
 	public GameField getUpperRight() {
 		return upperRight;
 	}
@@ -85,18 +102,41 @@ public class GameField{
 	public void setUp(GameField up) {
 		this.up = up;
 	}
-	
-	public boolean contains(GameField gf){
-		//TODO
+
+	public boolean contains(GameField gf) {
+		// TODO
 		return false;
 	}
-	
-	public boolean equals(GameField gf){
-		if((gf.getX() == x) && gf.getY() == y){
+
+	public boolean equals(GameField gf) {
+		if ((gf.getX() == x) && gf.getY() == y) {
 			return true;
 		}
-		return false;	
+		return false;
 	}
 
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 }

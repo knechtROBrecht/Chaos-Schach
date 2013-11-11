@@ -14,6 +14,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import javax.swing.JPanel;
@@ -35,11 +36,12 @@ public class Board extends JPanel implements MouseListener, ActionListener,
 	private int fieldCount = 20;
 	private List<GameField> gameFields = new ArrayList<GameField>();
 	private Set<GameField> reachableGameFields = new HashSet<GameField>();
-	private Timer time = new Timer(200, this);
+	private Timer time = new Timer(30, this);
 	private GameField clickedField;
+	private Random rand = new Random(20071969);
 
 	Board(Server server) {
-		player = new Player("Server");
+		player = new Player("Server", Color.blue);
 		input = new Input(server, this);
 		output = new Output(server);
 		turn = true;
@@ -47,7 +49,7 @@ public class Board extends JPanel implements MouseListener, ActionListener,
 	}
 
 	Board(Client client) {
-		player = new Player("Client");
+		player = new Player("Client", Color.red);
 		input = new Input(client, this);
 		output = new Output(client);
 		turn = false;
@@ -73,12 +75,15 @@ public class Board extends JPanel implements MouseListener, ActionListener,
 	}
 
 	public void setGamePieces() {
-		GamePiece piece = new GamePiece("Client", 5, 1, 1, 1);
-		gameFields.get(0).setPiece(piece);
+		GamePiece base1 = new GamePiece("Client","Base", 1);
+		gameFields.get(0).setPiece(base1);
+		GamePiece soldier1 = new GamePiece("Client","Soldier", 2);
+		gameFields.get(1).setPiece(soldier1);
 
-		GamePiece piece2 = new GamePiece("Server", 5, 2,
-				1, 1);
-		gameFields.get(399).setPiece(piece2);
+		GamePiece base2 = new GamePiece("Server","Base",3);
+		gameFields.get(399).setPiece(base2);
+		GamePiece soldier2 = new GamePiece("Server","Soldier", 4);
+		gameFields.get(398).setPiece(soldier2);
 	}
 
 	public void setGameFields() {
@@ -89,7 +94,7 @@ public class Board extends JPanel implements MouseListener, ActionListener,
 		int flag = 0;
 		for (int j = 0; j < fieldCount; j++) {
 			for (int i = 0; i < fieldCount; i++) {
-				gameFields.add(new GameField(mx, my));
+				gameFields.add(new GameField(mx, my, rand.nextInt(2)));
 
 				my += height * 2;
 			}
@@ -147,7 +152,7 @@ public class Board extends JPanel implements MouseListener, ActionListener,
 			polygon.addPoint(ex, ey);
 			polygon.addPoint(fx, fy);
 
-			g2.setColor(Color.LIGHT_GRAY);
+			g2.setColor(gf.getColor());
 			g2.fillPolygon(polygon);
 			g2.drawPolygon(polygon);
 
@@ -160,15 +165,16 @@ public class Board extends JPanel implements MouseListener, ActionListener,
 
 		for (GameField gf : gameFields) {
 			if (gf.getPiece() != null) {
-				if (gf.getPiece().getOwner().equals("Client")) {
-					g2.setColor(Color.WHITE);
-
-				} else {
-					g2.setColor(Color.BLACK);
-				}
-
+				
+				g2.setColor(gf.getPiece().getColor());
 				g2.fillRect(gf.getX() - PIECESIZE / 2, gf.getY() - PIECESIZE
 						/ 2, PIECESIZE, PIECESIZE);
+				
+				if(gf.getPiece().getOwner().equals(player.getName())){
+					g2.setColor(Color.BLUE);
+				}else{
+					g2.setColor(Color.RED);
+				}
 				g2.drawRect(gf.getX() - PIECESIZE / 2, gf.getY() - PIECESIZE
 						/ 2, PIECESIZE, PIECESIZE);
 			} else {

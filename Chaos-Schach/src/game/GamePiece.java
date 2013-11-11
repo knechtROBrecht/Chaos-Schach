@@ -1,19 +1,33 @@
 package game;
 
+import java.awt.Color;
+
 public class GamePiece {
 
 	private String owner;
 	private int id;
+	private String type;
 	private int steps;
 	private int hp;
 	private int attack;
+	private Color color;
 
-	public GamePiece(String owner, int steps, int id, int attack, int hp) {
-		this.owner =owner;
-		this.steps = steps;
+	public GamePiece(String owner, String type, int id) {
+		this.owner = owner;
 		this.id = id;
+		this.setType(type);
+		if (type.endsWith("Base")) {
+			initialize(0, 100, 10,Color.black);
+		} else if (type.endsWith("Soldier")) {
+			initialize(2, 10, 2, Color.WHITE);
+		}
+	}
+
+	private void initialize(int steps, int hp, int attack, Color color) {
+		this.steps = steps;
 		this.attack = attack;
 		this.hp = hp;
+		this.setColor(color);
 	}
 
 	public int getSteps() {
@@ -46,5 +60,21 @@ public class GamePiece {
 
 	public void setHp(int hp) {
 		this.hp = hp;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
 	}
 }
