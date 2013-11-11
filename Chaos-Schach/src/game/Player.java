@@ -1,12 +1,10 @@
 package game;
 
-import java.awt.Color;
-
 public class Player{
 	
 	private String name;
 	
-	Player(String name, Color color){
+	Player(String name){
 		this.setName(name);
 	}
 

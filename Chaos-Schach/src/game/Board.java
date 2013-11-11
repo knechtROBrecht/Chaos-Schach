@@ -41,7 +41,7 @@ public class Board extends JPanel implements MouseListener, ActionListener,
 	private Random rand = new Random(20071969);
 
 	Board(Server server) {
-		player = new Player("Server", Color.blue);
+		player = new Player("Server");
 		input = new Input(server, this);
 		output = new Output(server);
 		turn = true;
@@ -49,7 +49,7 @@ public class Board extends JPanel implements MouseListener, ActionListener,
 	}
 
 	Board(Client client) {
-		player = new Player("Client", Color.red);
+		player = new Player("Client");
 		input = new Input(client, this);
 		output = new Output(client);
 		turn = false;
