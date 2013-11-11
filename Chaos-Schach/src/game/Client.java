@@ -10,8 +10,8 @@ public class Client {
 	private Socket socket;
 	private DataOutputStream dout;
 	private DataInputStream din;
-	private String ip;
-	private String name;
+	//private String ip;
+	//private String name;
 
 	Client(Frame frame) throws Exception {
 		//a
