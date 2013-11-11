@@ -2,7 +2,6 @@ package game;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.net.Socket;
 
 public class Client {
@@ -14,7 +13,6 @@ public class Client {
 	//private String name;
 
 	Client(Frame frame) throws Exception {
-		//a
 		// ip = JOptionPane.showInputDialog("Geben sie die ip ein:");
 		socket = new Socket("127.0.0.1", 7777);
 		dout = new DataOutputStream(socket.getOutputStream());
@@ -29,15 +27,5 @@ public class Client {
 	public DataInputStream getDis() {
 		return din;
 	}
-	
-	public void end(){
-		try {
-			dout.writeUTF("b");
-			dout.close();
-			din.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+
 }

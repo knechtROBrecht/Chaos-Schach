@@ -66,10 +66,10 @@ public class Frame extends JFrame implements Runnable, ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		if(e.getSource() == this.button1){
-			WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
-            Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
-            server.end();
-		}
+//		if(e.getSource() == this.button1){
+//			WindowEvent wev = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+//            Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wev);
+//            server.end();
+//		}
 	}
 }
