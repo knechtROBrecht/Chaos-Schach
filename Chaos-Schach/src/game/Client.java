@@ -12,9 +12,9 @@ public class Client {
 	//private String ip;
 	//private String name;
 
-	Client(Frame frame) throws Exception {
+	Client(GameFrame frame) throws Exception {
 		// ip = JOptionPane.showInputDialog("Geben sie die ip ein:");
-		socket = new Socket("127.0.0.1", 7777);
+		socket = new Socket("127.0.0.1", 7777); //was passiert wenn kein server erreicht wird?
 		dout = new DataOutputStream(socket.getOutputStream());
 		din = new DataInputStream(socket.getInputStream());
 		frame.addBoard(new Board(this));
