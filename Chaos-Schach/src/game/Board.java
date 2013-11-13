@@ -193,37 +193,37 @@ public class Board extends JPanel implements MouseInputListener,
 
 	public Set<GameField> reachableGameFields(GameField gf, int steps) {
 		reachableGameFields.add(gf);
-		if (!(gf.getUpperRight() == null)) {
+		if (!(gf.getUpperRight() == null || gf.getUpperRight().getPiece() != null)) {
 			if (steps >= gf.getUpperRight().getDifficulty()) {
 				reachableGameFields(gf.getUpperRight(), steps
 						- gf.getUpperRight().getDifficulty());
 			}
 		}
-		if (!(gf.getLowerRight() == null)) {
+		if (!(gf.getLowerRight() == null|| gf.getLowerRight().getPiece() != null)) {
 			if (steps >= gf.getLowerRight().getDifficulty()) {
 				reachableGameFields(gf.getLowerRight(), steps
 						- gf.getLowerRight().getDifficulty());
 			}
 		}
-		if (!(gf.getLower() == null)) {
+		if (!(gf.getLower() == null|| gf.getLower().getPiece() != null)) {
 			if (steps >= gf.getLower().getDifficulty()) {
 				reachableGameFields(gf.getLower(), steps
 						- gf.getLower().getDifficulty());
 			}
 		}
-		if (!(gf.getLowerLeft() == null)) {
+		if (!(gf.getLowerLeft() == null|| gf.getLowerLeft().getPiece() != null)) {
 			if (steps >= gf.getLowerLeft().getDifficulty()) {
 				reachableGameFields(gf.getLowerLeft(), steps
 						- gf.getLowerLeft().getDifficulty());
 			}
 		}
-		if (!(gf.getUpperLeft() == null)) {
+		if (!(gf.getUpperLeft() == null|| gf.getUpperLeft().getPiece() != null)) {
 			if (steps >= gf.getUpperLeft().getDifficulty()) {
 				reachableGameFields(gf.getUpperLeft(), steps
 						- gf.getUpperLeft().getDifficulty());
 			}
 		}
-		if (!(gf.getUp() == null)) {
+		if (!(gf.getUp() == null|| gf.getUp().getPiece() != null)) {
 			if (steps >= gf.getUp().getDifficulty()) {
 				reachableGameFields(gf.getUp(), steps
 						- gf.getUp().getDifficulty());
