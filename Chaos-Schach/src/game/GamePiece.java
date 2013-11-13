@@ -28,7 +28,7 @@ public class GamePiece {
 			initialize(2, 10, 2, Color.WHITE,1,"Soldier");
 			break;			
 		case 2:
-			initialize(15, 15, 1, Color.CYAN,3,"Archer");
+			initialize(3, 5, 1, Color.CYAN,3,"Archer");
 			break;
 		default:
 			break;
