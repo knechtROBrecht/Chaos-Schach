@@ -92,9 +92,16 @@ public class GameFrame extends JFrame implements Runnable {
 
 	}
 	
-	public void setTextArea(String str){
+	public void setTextArea(String str, Boolean bl){
 		textArea.setText("");
-		textArea.setText(str);
+		textArea.setText(str);		
+		if(bl){ 
+			textArea.append("your figure");
+			textArea.setForeground(new Color(0x00, 0xC0, 0x00));
+		}else{
+			textArea.append("enemys figure");
+			textArea.setForeground(Color.red);
+		}
 	}
 
 }

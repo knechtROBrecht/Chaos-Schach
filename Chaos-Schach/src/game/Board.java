@@ -289,7 +289,7 @@ public class Board extends JPanel implements MouseInputListener,
 	public void mouseMoved(MouseEvent event) {
 		GameField ngf = nearestField(event);
 		if (ngf.getPiece() != null) {
-			gameFrame.setTextArea((ngf.getPiece().toString()));
+			gameFrame.setTextArea(ngf.getPiece().toString(),ngf.getPiece().getOwner().equals(player.getName()));
 		}
 	}
 	
