@@ -26,6 +26,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 
 	private ArrayList<GameField> gameFields = new ArrayList<GameField>();
 	private Set<GameField> reachableGameFields = new HashSet<GameField>();
+	private Set<GameField> attackableGameFields = new HashSet<GameField>();
 	private Timer time = new Timer(30, this);
 	private GameField clickedField;
 	private Random rand = new Random(20071969);
@@ -208,6 +209,10 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 				g2.setColor(Color.GREEN);
 				g2.drawPolygon(polygon);
 			}
+			if (this.attackableGameFields.contains(gf)){
+				g2.setColor(Color.red);
+				g2.drawPolygon(polygon);
+			}
 
 		}
 
@@ -292,6 +297,45 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		}
 		return reachableGameFields;
 	}
+	public Set<GameField> attackableGameFields(GameField gf, int reach){
+		if ((gf.getUpperRight() != null && gf.getUpperRight().getPiece() == null)) {		
+				if(reach > 0) attackableGameFields(gf.getUpperRight(), reach-1);
+		}else if(gf.getUpperRight() != null && gf.getUpperRight().getPiece() != null && gf.getUpperRight().getPiece().getOwner() != player.getName()){
+			if(reach > 0){ attackableGameFields.add(gf.getUpperRight());
+			attackableGameFields(gf.getUpperRight(), reach-1);}
+		}
+		if ((gf.getLowerRight() != null && gf.getLowerRight().getPiece() == null)) {
+			if(reach > 0) attackableGameFields(gf.getLowerRight(), reach-1);
+		}else if(gf.getLowerRight() != null && gf.getLowerRight().getPiece() != null && gf.getLowerRight().getPiece().getOwner() != player.getName()){
+			if(reach > 0){ attackableGameFields.add(gf.getLowerRight());
+			attackableGameFields(gf.getLowerRight(), reach-1);}
+		}
+		if ((gf.getLower() != null && gf.getLower().getPiece() == null)) {
+			if(reach > 0) attackableGameFields(gf.getLower(), reach-1);
+		}else if(gf.getLower() != null && gf.getLower().getPiece() != null && gf.getLower().getPiece().getOwner() != player.getName()){
+			if(reach > 0){ attackableGameFields.add(gf.getLower());
+			attackableGameFields(gf.getLower(), reach-1);}
+		}
+		if ((gf.getLowerLeft() != null && gf.getLowerLeft().getPiece() == null)) {
+			if(reach > 0) attackableGameFields(gf.getLowerLeft(), reach-1);
+		}else if(gf.getLowerLeft() != null && gf.getLowerLeft().getPiece() != null && gf.getLowerLeft().getPiece().getOwner() != player.getName()){
+			if(reach > 0){ attackableGameFields.add(gf.getLowerLeft());
+			attackableGameFields(gf.getLowerLeft(), reach-1);}
+		}
+		if ((gf.getUpperLeft() != null && gf.getUpperLeft().getPiece() == null)) {
+			if(reach > 0) attackableGameFields(gf.getUpperLeft(), reach-1);
+		}else if(gf.getUpperLeft() != null && gf.getUpperLeft().getPiece() != null && gf.getUpperLeft().getPiece().getOwner() != player.getName()){
+			if(reach > 0){ attackableGameFields.add(gf.getUpperLeft());
+			attackableGameFields(gf.getUpperLeft(), reach-1);}
+		}
+		if ((gf.getUp() != null && gf.getUp().getPiece() == null)) {
+			if(reach > 0) attackableGameFields(gf.getUp(), reach-1);
+		}else if(gf.getUp() != null && gf.getUp().getPiece() != null && gf.getUp().getPiece().getOwner() != player.getName()){
+			if(reach > 0){ attackableGameFields.add(gf.getUp());
+			attackableGameFields(gf.getUp(), reach-1);}
+		}
+		return attackableGameFields;
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -307,6 +351,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 							.equals(player.getName())) {
 				reachableGameFields = reachableGameFields(clickedField,
 						clickedField.getPiece().getStepsLeft());
+				attackableGameFields = attackableGameFields(clickedField,clickedField.getPiece().getReach());
 			}
 		}
 	}
@@ -328,7 +373,12 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 						gf.getPiece().setStepsLeft(0);
 					}
 				}
+			}else if(!(clickedField.equals(releasedField)) && releasedField.getPiece() != null && clickedField.getPiece() != null){
+				for(GameField gf : attackableGameFields){
+					
+				}
 			}
+			attackableGameFields.clear();
 			reachableGameFields.clear();
 		}
 	}

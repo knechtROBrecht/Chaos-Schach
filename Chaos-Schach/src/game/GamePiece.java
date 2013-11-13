@@ -27,7 +27,7 @@ public class GamePiece {
 			initialize(2, 10, 2, Color.WHITE,1,"Soldier");
 			break;			
 		case 2:
-			initialize(3, 10, 1, Color.CYAN,3,"Archer");
+			initialize(15, 15, 1, Color.CYAN,3,"Archer");
 			break;
 		default:
 			break;
@@ -35,12 +35,13 @@ public class GamePiece {
 	}
 
 	private void initialize(int steps, int hp, int attack, Color color, int reach, String name) {
-		this.setName(name);
 		this.steps = steps;
 		this.stepsLeft = steps;
-		this.attack = attack;
 		this.hp = hp;
-		this.setColor(color);
+		this.attack = attack;
+		this.color = color;
+		this.reach = reach;
+		this.name = name;
 	}
 
 	public int getSteps() {
@@ -89,7 +90,7 @@ public class GamePiece {
 
 	public String toString() {
 		return "Type: " + getName() + newline + "Attack: " + getAttack()
-				+ newline + "HP: " + getHp() + newline + "StepsLeft: "
+				+ newline + "Reach: " + reach + newline + "HP: " + getHp() + newline + "StepsLeft: "
 				+ getStepsLeft() + newline + "Steps: " + getSteps() + newline;
 
 	}
