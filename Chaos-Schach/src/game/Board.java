@@ -1,29 +1,15 @@
 package game;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Polygon;
-import java.awt.RenderingHints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import javax.swing.*;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 
 @SuppressWarnings("serial")
 public class Board extends JPanel implements MouseInputListener,
-		ActionListener, KeyListener {
+		ActionListener {
 
 	final int FIELDHEIGHT = 20;
 	final int FIELDWIDTH = 20;
@@ -35,12 +21,11 @@ public class Board extends JPanel implements MouseInputListener,
 	private Output output;
 	private boolean turn;
 	private int fieldCount = 20;
-	private List<GameField> gameFields = new ArrayList<GameField>();
+	private ArrayList<GameField> gameFields = new ArrayList<GameField>();
 	private Set<GameField> reachableGameFields = new HashSet<GameField>();
 	private Timer time = new Timer(30, this);
 	private GameField clickedField;
 	private Random rand = new Random(20071969);
-	private JTextArea textArea = new JTextArea(5, 5);
 	private GameFrame gameFrame;
 
 	Board(Server server) {
@@ -63,7 +48,6 @@ public class Board extends JPanel implements MouseInputListener,
 		(new Thread(input)).start();
 		addMouseListener(this);
 		addMouseMotionListener(this);
-		addKeyListener(this);
 		this.requestFocus();
 		setGameFields();
 		setGamePieces();
@@ -301,10 +285,6 @@ public class Board extends JPanel implements MouseInputListener,
 		return nearestGameField;
 	}
 
-	public JTextArea getStatusArea() {
-		return textArea;
-	}
-
 	@Override
 	public void mouseMoved(MouseEvent event) {
 		GameField ngf = nearestField(event);
@@ -325,21 +305,6 @@ public class Board extends JPanel implements MouseInputListener,
 	public void turn(){
 		output.turn();
 		turn = false;
-	}
-
-	@Override
-	public void keyPressed(KeyEvent arg0) {
-
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-
 	}
 
 	@Override
