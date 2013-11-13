@@ -25,6 +25,7 @@ public class GameFrame extends JFrame implements Runnable {
 	private String opt;
 	private Board board;
 	private JTextArea textArea;
+	private JLabel yourTurn;
 
 	GameFrame(String opt) {
 		this.opt = opt;
@@ -41,7 +42,6 @@ public class GameFrame extends JFrame implements Runnable {
 
 	@Override
 	public void run() {
-//		this.setJMenuBar(new Menu());
 		this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		this.setSize(1280, 720);
 		this.setBackground(Color.DARK_GRAY);
@@ -50,8 +50,9 @@ public class GameFrame extends JFrame implements Runnable {
 
 		westPanel = new JPanel();
 		westPanel.setLayout(new BorderLayout());
-		westPanel.setPreferredSize(new Dimension(200,900));
+		westPanel.setPreferredSize(new Dimension(200,720));
 		aufgeben = new JButton("Aufgeben");
+		aufgeben.setPreferredSize(new Dimension(200,80));
 		aufgeben.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(board != null){
@@ -61,16 +62,27 @@ public class GameFrame extends JFrame implements Runnable {
 			}
 		});
 		turn = new JButton("Turn");
+		turn.setPreferredSize(new Dimension(200,100));
 		turn.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				if(board != null) board.turn();
+				if(board != null){
+					if(board.getTurn()) board.turn();
+				}
 			}
 		});
 		textArea = new JTextArea(20, 5);
 		textArea.setEditable(false);
+		JPanel southButtons = new JPanel();
+		southButtons.setLayout(new BorderLayout());
+		southButtons.add(turn, BorderLayout.NORTH);
+		southButtons.add(aufgeben, BorderLayout.CENTER);
+		yourTurn = new JLabel();
+		yourTurn.setPreferredSize(new Dimension(200,200));
+		yourTurn.setOpaque(true);
+		yourTurn.setHorizontalAlignment( JLabel.CENTER );
 		westPanel.add(textArea, BorderLayout.NORTH);
-		westPanel.add(turn, BorderLayout.CENTER);
-		westPanel.add(aufgeben, BorderLayout.PAGE_END);
+		westPanel.add(yourTurn, BorderLayout.CENTER);
+		westPanel.add(southButtons, BorderLayout.SOUTH);
 		westPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		this.add(westPanel, BorderLayout.WEST);
 		conn = new JLabel("waiting for connection");
@@ -94,13 +106,23 @@ public class GameFrame extends JFrame implements Runnable {
 	
 	public void setTextArea(String str, Boolean bl){
 		textArea.setText("");
-		textArea.setText(str);		
+		textArea.setText(str);
 		if(bl){ 
 			textArea.append("your figure");
 			textArea.setForeground(new Color(0x00, 0xC0, 0x00));
 		}else{
 			textArea.append("enemys figure");
 			textArea.setForeground(Color.red);
+		}
+	}
+	
+	public void changeTurnStatus(){
+		if(board.getTurn()){
+			yourTurn.setText("Sie sind am Zug!");
+			yourTurn.setBackground(Color.green);
+		}else{
+			yourTurn.setText("Ihr Gegner ist am Zug!");
+			yourTurn.setBackground(Color.gray);
 		}
 	}
 

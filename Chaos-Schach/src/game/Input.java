@@ -27,10 +27,9 @@ public class Input implements Runnable {
 
 	public void interprete(String str) {
 		if (str.matches("t")) {
-			JOptionPane.showMessageDialog(null, "Sie sind nun am Zug", "",
-					JOptionPane.WARNING_MESSAGE);
-			board.spawn();
 			board.setTurn(true);
+			board.changeTurnStatus();
+			board.spawn();
 		}
 		if (str.matches("m.*")) {
 			board.moveGamePiece(Integer.parseInt(str.split(",")[1]),

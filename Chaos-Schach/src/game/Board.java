@@ -60,12 +60,16 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		time.start();
 	}
 
-	public boolean isTurn() {
+	public boolean getTurn() {
 		return turn;
 	}
 
 	public void setTurn(boolean turn) {
 		this.turn = turn;
+	}
+	
+	public void changeTurnStatus(){
+		gameFrame.changeTurnStatus();
 	}
 
 	public void setGamePieces() {
@@ -364,6 +368,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	public void turn() {
 		output.turn();
 		turn = false;
+		gameFrame.changeTurnStatus();
 		resetSteps();
 	}
 
@@ -398,10 +403,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	}
 
 	public void create(int x, int y, String player, int type) {
-		System.out.println(type);
-		GamePiece gp = new GamePiece(player,type);
-		System.out.println(gp);
-		getGameField(x,y).setPiece(gp);
+		getGameField(x,y).setPiece(new GamePiece(player,type));
 	}
 
 }
