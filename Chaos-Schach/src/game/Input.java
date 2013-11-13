@@ -9,7 +9,7 @@ public class Input implements Runnable {
 	private DataInputStream din;
 	private Board board;
 	private Boolean end = false;
-	
+
 	@Override
 	public void run() {
 		while (!end) {
@@ -17,18 +17,18 @@ public class Input implements Runnable {
 				interprete(din.readUTF());
 
 			} catch (IOException e) {
-				try {
-					din.close();
-					end = true;
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+				JOptionPane.showMessageDialog(null,
+						"Verbindung zum Gegner unterbrochen", "",
+						JOptionPane.WARNING_MESSAGE);
+				System.exit(0);
 			}
 		}
 	}
 
 	public void interprete(String str) {
 		if (str.matches("t")) {
+			JOptionPane.showMessageDialog(null, "Sie sind nun am Zug", "",
+					JOptionPane.WARNING_MESSAGE);
 			board.setTurn(true);
 		}
 		if (str.matches("m.*")) {
@@ -37,8 +37,10 @@ public class Input implements Runnable {
 					Integer.parseInt(str.split(",")[3]),
 					Integer.parseInt(str.split(",")[4]));
 		}
-		if (str.matches("c.*")){
-			JOptionPane.showMessageDialog(null,"Ihr Gegner hat das Spiel verlassen","Gewonnen",JOptionPane.WARNING_MESSAGE);
+		if (str.matches("c.*")) {
+			JOptionPane.showMessageDialog(null,
+					"Ihr Gegner hat das Spiel aufgegeben", "Gewonnen",
+					JOptionPane.WARNING_MESSAGE);
 			System.exit(0);
 		}
 	}

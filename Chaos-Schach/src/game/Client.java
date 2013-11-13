@@ -2,7 +2,12 @@ package game;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ConnectException;
 import java.net.Socket;
+import java.net.UnknownHostException;
+
+import javax.swing.JOptionPane;
 
 public class Client {
 
@@ -12,12 +17,23 @@ public class Client {
 	//private String ip;
 	//private String name;
 
-	Client(GameFrame frame) throws Exception {
+	Client(GameFrame frame) {
 		// ip = JOptionPane.showInputDialog("Geben sie die ip ein:");
-		socket = new Socket("127.0.0.1", 7777); //was passiert wenn kein server erreicht wird?
-		dout = new DataOutputStream(socket.getOutputStream());
-		din = new DataInputStream(socket.getInputStream());
-		frame.addBoard(new Board(this));
+		try{
+			socket = new Socket("127.0.0.1", 7777);
+			dout = new DataOutputStream(socket.getOutputStream());
+			din = new DataInputStream(socket.getInputStream());
+			frame.addBoard(new Board(this));
+		}catch(ConnectException e){
+			JOptionPane.showMessageDialog(null,"Keinen möglichen Server gefunden","Verbindungsfehler",JOptionPane.WARNING_MESSAGE);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	public DataOutputStream getDos() {

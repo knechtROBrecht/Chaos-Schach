@@ -10,6 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
@@ -17,7 +18,7 @@ import javax.swing.WindowConstants;
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame implements Runnable {
 
-	private JButton beenden;
+	private JButton aufgeben;
 	private JButton turn; 
 	private JPanel westPanel;
 	private JLabel conn;
@@ -40,7 +41,7 @@ public class GameFrame extends JFrame implements Runnable {
 
 	@Override
 	public void run() {
-		this.setJMenuBar(new Menu());
+//		this.setJMenuBar(new Menu());
 		this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		this.setSize(1000, 900);
 		this.setBackground(Color.DARK_GRAY);
@@ -50,10 +51,13 @@ public class GameFrame extends JFrame implements Runnable {
 		westPanel = new JPanel();
 		westPanel.setLayout(new BorderLayout());
 		westPanel.setPreferredSize(new Dimension(200,900));
-		beenden = new JButton("Beenden");
-		beenden.addActionListener(new ActionListener() {
+		aufgeben = new JButton("Aufgeben");
+		aufgeben.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(board != null) board.end();
+				if(board != null){
+					JOptionPane.showMessageDialog(null,"Sie haben das Spiel aufgegeben","Verloren",JOptionPane.WARNING_MESSAGE);
+					board.end();
+				}else System.exit(0);
 			}
 		});
 		turn = new JButton("Turn");
@@ -66,7 +70,7 @@ public class GameFrame extends JFrame implements Runnable {
 		textArea.setEditable(false);
 		westPanel.add(textArea, BorderLayout.NORTH);
 		westPanel.add(turn, BorderLayout.CENTER);
-		westPanel.add(beenden, BorderLayout.PAGE_END);
+		westPanel.add(aufgeben, BorderLayout.PAGE_END);
 		westPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		this.add(westPanel, BorderLayout.WEST);
 		conn = new JLabel("waiting for connection");
