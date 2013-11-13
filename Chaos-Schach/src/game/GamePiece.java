@@ -15,13 +15,14 @@ public class GamePiece {
 	private int attack;
 	private Color color;
 	private int reach;
+	private Boolean atk = true;
 
 	public GamePiece(String owner, int type) {
 		this.owner = owner;
 		this.type = type;
 		switch (type) {
 		case 0:
-			initialize(0, 100, 10, Color.black, 1, "Base");
+			initialize(0, 1, 10, Color.black, 1, "Base");
 			break;
 		case 1:
 			initialize(2, 10, 2, Color.WHITE,1,"Soldier");
@@ -117,5 +118,13 @@ public class GamePiece {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Boolean getAtk() {
+		return atk;
+	}
+
+	public void setAtk(Boolean atk) {
+		this.atk = atk;
 	}
 }

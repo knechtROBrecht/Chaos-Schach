@@ -49,6 +49,18 @@ public class Input implements Runnable {
 					str.split(",")[3],
 					Integer.parseInt(str.split(",")[4]));
 		}
+		if (str.matches("a.*")) {
+			board.attack(Integer.parseInt(str.split(",")[1]),
+					Integer.parseInt(str.split(",")[2]),
+					Integer.parseInt(str.split(",")[3]),
+					Integer.parseInt(str.split(",")[4]));
+		}
+		if (str.matches("w.*")){
+			JOptionPane.showMessageDialog(null,
+					"Ihre Basis wurde zerstört \nSie haben verloren", "Verloren",
+					JOptionPane.WARNING_MESSAGE);
+			System.exit(0);
+		}
 	}
 
 	Input(Server server, Board board) {

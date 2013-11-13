@@ -47,4 +47,20 @@ public class Output {
 		}
 		
 	}
+	
+	public void attack(int xAlt,int yAlt,int xNeu,int yNeu){
+		try {
+			dout.writeUTF("a,"+xAlt+","+yAlt+","+xNeu+","+yNeu);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void win(){
+		try {
+			dout.writeUTF("w");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

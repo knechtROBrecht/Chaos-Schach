@@ -19,6 +19,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	private final int FIELDCOUNTY = 11;
 
 	private int basePos;
+	private int enemyBasePos;
 	private Player player;
 	private Input input;
 	private Output output;
@@ -37,6 +38,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		input = new Input(server, this);
 		output = new Output(server);
 		basePos = FIELDCOUNTX * FIELDCOUNTY - 1;
+		enemyBasePos = 0;
 		turn = true;
 		init();
 	}
@@ -46,6 +48,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		input = new Input(client, this);
 		output = new Output(client);
 		basePos = 0;
+		enemyBasePos = FIELDCOUNTX * FIELDCOUNTY - 1;
 		turn = false;
 		init();
 	}
@@ -251,12 +254,6 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		return null;
 	}
 
-	public void moveGamePiece(int xAlt, int yAlt, int xNeu, int yNeu) {
-		getGameField(xNeu, yNeu).setPiece(getGameField(xAlt, yAlt).getPiece());
-		getGameField(xAlt, yAlt).setPiece(null);
-		getGameField(xNeu, yNeu).getPiece().setStepsLeft(0);
-	}
-
 	public Set<GameField> reachableGameFields(GameField gf, int steps) {
 		reachableGameFields.add(gf);
 		if (!(gf.getUpperRight() == null || gf.getUpperRight().getPiece() != null)) {
@@ -339,7 +336,6 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO
 		this.repaint();
 	}
 
@@ -351,7 +347,9 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 							.equals(player.getName())) {
 				reachableGameFields = reachableGameFields(clickedField,
 						clickedField.getPiece().getStepsLeft());
-				attackableGameFields = attackableGameFields(clickedField,clickedField.getPiece().getReach());
+				if(clickedField.getPiece().getAtk()){
+					attackableGameFields = attackableGameFields(clickedField,clickedField.getPiece().getReach());
+				}
 			}
 		}
 	}
@@ -365,7 +363,6 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 
 				for (GameField gf : reachableGameFields) {
 					if (gf == releasedField) {
-						// TODO output
 						output.move(clickedField.getX(), clickedField.getY(),
 								releasedField.getX(), releasedField.getY());
 						moveGamePiece(clickedField.getX(), clickedField.getY(),
@@ -375,12 +372,33 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 				}
 			}else if(!(clickedField.equals(releasedField)) && releasedField.getPiece() != null && clickedField.getPiece() != null){
 				for(GameField gf : attackableGameFields){
-					
+					if(gf == releasedField){
+						output.attack(clickedField.getX(), clickedField.getY(),
+								releasedField.getX(), releasedField.getY());
+						attack(clickedField.getX(), clickedField.getY(),
+								releasedField.getX(), releasedField.getY());
+					}
 				}
 			}
 			attackableGameFields.clear();
 			reachableGameFields.clear();
 		}
+	}
+	
+	public void attack(int xAlt, int yAlt, int xNeu, int yNeu){
+		if(getGameField(xNeu,yNeu).getPiece().getHp() <= getGameField(xAlt,yAlt).getPiece().getAttack()){
+			getGameField(xNeu,yNeu).setPiece(null);
+		}else{
+			getGameField(xNeu,yNeu).getPiece().setHp(getGameField(xNeu,yNeu).getPiece().getHp() - getGameField(xAlt,yAlt).getPiece().getAttack());
+		}
+		getGameField(xAlt,yAlt).getPiece().setAtk(false);
+		if(gameFields.get(enemyBasePos).getPiece() == null) win();
+	}
+	
+	public void moveGamePiece(int xAlt, int yAlt, int xNeu, int yNeu) {
+		getGameField(xNeu, yNeu).setPiece(getGameField(xAlt, yAlt).getPiece());
+		getGameField(xAlt, yAlt).setPiece(null);
+		getGameField(xNeu, yNeu).getPiece().setStepsLeft(0);
 	}
 
 	public GameField nearestField(MouseEvent event) {
@@ -419,15 +437,22 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		output.turn();
 		turn = false;
 		gameFrame.changeTurnStatus();
-		resetSteps();
+		resetStatus();
+	}
+	
+	public void win(){
+		output.win();
+		JOptionPane.showMessageDialog(null,"Gegnerische Basis zerstört \nSie haben das Spiel gewonnen!","Gewonnen",JOptionPane.WARNING_MESSAGE);
+		System.exit(0);
 	}
 
-	public void resetSteps() {
+	public void resetStatus() {
 		for (GameField gf : gameFields) {
 			if ((gf.getPiece() != null)
 					&& (gf.getPiece().getOwner().equals(player.getName()))) {
 
 				gf.getPiece().setStepsLeft(gf.getPiece().getSteps());
+				gf.getPiece().setAtk(true);
 			}
 		}
 	}
