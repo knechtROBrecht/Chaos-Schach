@@ -3,18 +3,26 @@ package game;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-public class Input implements Runnable {
-	DataInputStream din;
-	Board board;
+import javax.swing.JOptionPane;
 
+public class Input implements Runnable {
+	private DataInputStream din;
+	private Board board;
+	private Boolean end = false;
+	
 	@Override
 	public void run() {
-		while (true) {
+		while (!end) {
 			try {
 				interprete(din.readUTF());
 
 			} catch (IOException e) {
-				e.printStackTrace();
+				try {
+					din.close();
+					end = true;
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
 		}
 	}
@@ -29,14 +37,9 @@ public class Input implements Runnable {
 					Integer.parseInt(str.split(",")[3]),
 					Integer.parseInt(str.split(",")[4]));
 		}
-		if (str.matches("b.*")){
-			try {
-				System.out.println("ahahah");
-				din.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		if (str.matches("c.*")){
+			JOptionPane.showMessageDialog(null,"Ihr Gegner hat das Spiel verlassen","Gewonnen",JOptionPane.WARNING_MESSAGE);
+			System.exit(0);
 		}
 	}
 

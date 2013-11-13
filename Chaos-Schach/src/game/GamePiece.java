@@ -4,6 +4,8 @@ import java.awt.Color;
 
 public class GamePiece {
 
+	private final static String newline = "\n";
+
 	private String owner;
 	private int id;
 	private String type;
@@ -17,7 +19,7 @@ public class GamePiece {
 		this.id = id;
 		this.setType(type);
 		if (type.endsWith("Base")) {
-			initialize(0, 100, 10,Color.black);
+			initialize(0, 100, 10, Color.black);
 		} else if (type.endsWith("Soldier")) {
 			initialize(2, 10, 2, Color.WHITE);
 		}
@@ -76,5 +78,12 @@ public class GamePiece {
 
 	public void setColor(Color color) {
 		this.color = color;
+	}
+
+	public String toString() {
+		return "Type: " + getType() + newline + "ID: " + getId() + newline
+				+ "Attack: " + getAttack() + newline + "HP: " + getHp()
+				+ newline + "StepsLeft: " + getSteps() + newline;
+
 	}
 }

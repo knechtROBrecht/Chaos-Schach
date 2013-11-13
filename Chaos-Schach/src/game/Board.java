@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -18,11 +17,13 @@ import java.util.Random;
 import java.util.Set;
 
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.Timer;
+import javax.swing.event.MouseInputListener;
 
 @SuppressWarnings("serial")
-public class Board extends JPanel implements MouseListener, ActionListener,
-		KeyListener {
+public class Board extends JPanel implements MouseInputListener,
+		ActionListener, KeyListener {
 
 	final int FIELDHEIGHT = 20;
 	final int FIELDWIDTH = 20;
@@ -31,7 +32,7 @@ public class Board extends JPanel implements MouseListener, ActionListener,
 
 	private Player player;
 	private Input input;
-	private Output output; 
+	private Output output;
 	private boolean turn;
 	private int fieldCount = 20;
 	private List<GameField> gameFields = new ArrayList<GameField>();
@@ -39,6 +40,8 @@ public class Board extends JPanel implements MouseListener, ActionListener,
 	private Timer time = new Timer(30, this);
 	private GameField clickedField;
 	private Random rand = new Random(20071969);
+	private JTextArea textArea = new JTextArea(5, 5);
+	private GameFrame gameFrame;
 
 	Board(Server server) {
 		player = new Player("Server");
@@ -59,6 +62,7 @@ public class Board extends JPanel implements MouseListener, ActionListener,
 	private void init() {
 		(new Thread(input)).start();
 		addMouseListener(this);
+		addMouseMotionListener(this);
 		addKeyListener(this);
 		this.requestFocus();
 		setGameFields();
@@ -75,14 +79,14 @@ public class Board extends JPanel implements MouseListener, ActionListener,
 	}
 
 	public void setGamePieces() {
-		GamePiece base1 = new GamePiece("Client","Base", 1);
+		GamePiece base1 = new GamePiece("Client", "Base", 1);
 		gameFields.get(0).setPiece(base1);
-		GamePiece soldier1 = new GamePiece("Client","Soldier", 2);
+		GamePiece soldier1 = new GamePiece("Client", "Soldier", 2);
 		gameFields.get(1).setPiece(soldier1);
 
-		GamePiece base2 = new GamePiece("Server","Base",3);
+		GamePiece base2 = new GamePiece("Server", "Base", 3);
 		gameFields.get(399).setPiece(base2);
-		GamePiece soldier2 = new GamePiece("Server","Soldier", 4);
+		GamePiece soldier2 = new GamePiece("Server", "Soldier", 4);
 		gameFields.get(398).setPiece(soldier2);
 	}
 
@@ -165,14 +169,14 @@ public class Board extends JPanel implements MouseListener, ActionListener,
 
 		for (GameField gf : gameFields) {
 			if (gf.getPiece() != null) {
-				
+
 				g2.setColor(gf.getPiece().getColor());
 				g2.fillRect(gf.getX() - PIECESIZE / 2, gf.getY() - PIECESIZE
 						/ 2, PIECESIZE, PIECESIZE);
-				
-				if(gf.getPiece().getOwner().equals(player.getName())){
+
+				if (gf.getPiece().getOwner().equals(player.getName())) {
 					g2.setColor(Color.BLUE);
-				}else{
+				} else {
 					g2.setColor(Color.RED);
 				}
 				g2.drawRect(gf.getX() - PIECESIZE / 2, gf.getY() - PIECESIZE
@@ -199,8 +203,8 @@ public class Board extends JPanel implements MouseListener, ActionListener,
 	}
 
 	public void moveGamePiece(int xAlt, int yAlt, int xNeu, int yNeu) {
-		getGameField(xNeu,yNeu).setPiece(getGameField(xAlt,yAlt).getPiece());
-		getGameField(xAlt, yAlt).setPiece(null);	
+		getGameField(xNeu, yNeu).setPiece(getGameField(xAlt, yAlt).getPiece());
+		getGameField(xAlt, yAlt).setPiece(null);
 	}
 
 	public Set<GameField> reachableGameFields(GameField gf, int steps) {
@@ -274,8 +278,6 @@ public class Board extends JPanel implements MouseListener, ActionListener,
 						// TODO output
 						output.move(clickedField.getX(), clickedField.getY(),
 								releasedField.getX(), releasedField.getY());
-						output.turn();
-						turn = false;
 						moveGamePiece(clickedField.getX(), clickedField.getY(),
 								releasedField.getX(), releasedField.getY());
 					}
@@ -297,6 +299,32 @@ public class Board extends JPanel implements MouseListener, ActionListener,
 			}
 		}
 		return nearestGameField;
+	}
+
+	public JTextArea getStatusArea() {
+		return textArea;
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent event) {
+		GameField ngf = nearestField(event);
+		if (ngf.getPiece() != null) {
+			gameFrame.setTextArea((ngf.getPiece().toString()));
+		}
+	}
+	
+	public void addGameFrame(GameFrame gameFrame){
+		this.gameFrame = gameFrame;
+	}
+		
+	public void end(){
+		output.close();
+		System.exit(0);
+	}
+	
+	public void turn(){
+		output.turn();
+		turn = false;
 	}
 
 	@Override
@@ -326,6 +354,11 @@ public class Board extends JPanel implements MouseListener, ActionListener,
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
+
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
 
 	}
 

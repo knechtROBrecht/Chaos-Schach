@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class Server {
 
@@ -22,7 +23,7 @@ public class Server {
 			dout = new DataOutputStream(socket.getOutputStream());
 			din = new DataInputStream(socket.getInputStream());
 			this.frame.addBoard(new Board(this));
-		} catch (Exception e) {
+		} catch (SocketException e) {
 			e.printStackTrace();
 		}
 	}

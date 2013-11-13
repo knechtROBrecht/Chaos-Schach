@@ -4,7 +4,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class Output {
-	DataOutputStream dout;
+	private DataOutputStream dout;
 
 	Output(Server server) {
 		dout = server.getDos();
@@ -26,6 +26,14 @@ public class Output {
 	public void move(int xAlt,int yAlt,int xNeu,int yNeu){
 		try {
 			dout.writeUTF("m,"+xAlt+","+yAlt+","+xNeu+","+yNeu);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void close(){
+		try {
+			dout.writeUTF("c");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
