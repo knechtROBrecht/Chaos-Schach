@@ -43,7 +43,7 @@ public class GameFrame extends JFrame implements Runnable {
 	public void run() {
 //		this.setJMenuBar(new Menu());
 		this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		this.setSize(1000, 900);
+		this.setSize(1280, 720);
 		this.setBackground(Color.DARK_GRAY);
 		this.setLayout(new BorderLayout());
 		this.setResizable(false);

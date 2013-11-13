@@ -7,26 +7,36 @@ public class GamePiece {
 	private final static String newline = "\n";
 
 	private String owner;
-	private int id;
-	private String type;
+	private int type;
+	private String name;
 	private int steps;
+	private int stepsLeft;
 	private int hp;
 	private int attack;
 	private Color color;
+	private int reach;
 
-	public GamePiece(String owner, String type, int id) {
+	public GamePiece(String owner, int type) {
 		this.owner = owner;
-		this.id = id;
 		this.setType(type);
-		if (type.endsWith("Base")) {
-			initialize(0, 100, 10, Color.black);
-		} else if (type.endsWith("Soldier")) {
-			initialize(2, 10, 2, Color.WHITE);
+		switch (type) {
+		case 0:
+			initialize(0, 100, 10, Color.black, 1, "Base");
+
+			break;
+		case 1:
+			initialize(2, 10, 2, Color.WHITE,1,"Soldier");
+
+			break;
+		default:
+			break;
 		}
 	}
 
-	private void initialize(int steps, int hp, int attack, Color color) {
+	private void initialize(int steps, int hp, int attack, Color color, int reach, String name) {
+		this.setName(name);
 		this.steps = steps;
+		this.stepsLeft = steps;
 		this.attack = attack;
 		this.hp = hp;
 		this.setColor(color);
@@ -34,10 +44,6 @@ public class GamePiece {
 
 	public int getSteps() {
 		return steps;
-	}
-
-	public int getId() {
-		return id;
 	}
 
 	public String getOwner() {
@@ -64,12 +70,12 @@ public class GamePiece {
 		this.hp = hp;
 	}
 
-	public String getType() {
+	public int getType() {
 		return type;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setType(int type2) {
+		this.type = type2;
 	}
 
 	public Color getColor() {
@@ -81,9 +87,33 @@ public class GamePiece {
 	}
 
 	public String toString() {
-		return "Type: " + getType() + newline + "ID: " + getId() + newline
-				+ "Attack: " + getAttack() + newline + "HP: " + getHp()
-				+ newline + "StepsLeft: " + getSteps() + newline;
+		return "Type: " + getName() + newline + "Attack: " + getAttack()
+				+ newline + "HP: " + getHp() + newline + "StepsLeft: "
+				+ getStepsLeft() + newline + "Steps: " + getSteps() + newline;
 
+	}
+
+	public int getStepsLeft() {
+		return stepsLeft;
+	}
+
+	public void setStepsLeft(int stepsLeft) {
+		this.stepsLeft = stepsLeft;
+	}
+
+	public int getReach() {
+		return reach;
+	}
+
+	public void setReach(int reach) {
+		this.reach = reach;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

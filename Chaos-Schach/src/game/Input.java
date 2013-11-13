@@ -29,6 +29,7 @@ public class Input implements Runnable {
 		if (str.matches("t")) {
 			JOptionPane.showMessageDialog(null, "Sie sind nun am Zug", "",
 					JOptionPane.WARNING_MESSAGE);
+			board.spawn();
 			board.setTurn(true);
 		}
 		if (str.matches("m.*")) {

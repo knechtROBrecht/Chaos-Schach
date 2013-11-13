@@ -11,16 +11,19 @@ import javax.swing.event.MouseInputListener;
 public class Board extends JPanel implements MouseInputListener,
 		ActionListener {
 
-	final int FIELDHEIGHT = 20;
-	final int FIELDWIDTH = 20;
-	final int DISTANCE = 4;
-	final int PIECESIZE = (FIELDHEIGHT - DISTANCE) / 2;
-
+	private final int FIELDHEIGHT = 30;
+	private final int FIELDWIDTH = 30;
+	private final int DISTANCE = 4;
+	private final int PIECESIZE = (FIELDHEIGHT - DISTANCE);
+	private final int FIELDCOUNTX = 23;
+	private final int FIELDCOUNTY = 11;
+	
+	private int basePos;
 	private Player player;
 	private Input input;
 	private Output output;
 	private boolean turn;
-	private int fieldCount = 20;
+	
 	private ArrayList<GameField> gameFields = new ArrayList<GameField>();
 	private Set<GameField> reachableGameFields = new HashSet<GameField>();
 	private Timer time = new Timer(30, this);
@@ -32,6 +35,7 @@ public class Board extends JPanel implements MouseInputListener,
 		player = new Player("Server");
 		input = new Input(server, this);
 		output = new Output(server);
+		basePos = FIELDCOUNTX*FIELDCOUNTY-1;
 		turn = true;
 		init();
 	}
@@ -40,6 +44,7 @@ public class Board extends JPanel implements MouseInputListener,
 		player = new Player("Client");
 		input = new Input(client, this);
 		output = new Output(client);
+		basePos = 0;
 		turn = false;
 		init();
 	}
@@ -51,6 +56,8 @@ public class Board extends JPanel implements MouseInputListener,
 		this.requestFocus();
 		setGameFields();
 		setGamePieces();
+		
+		
 		time.start();
 	}
 
@@ -63,15 +70,41 @@ public class Board extends JPanel implements MouseInputListener,
 	}
 
 	public void setGamePieces() {
-		GamePiece base1 = new GamePiece("Client", "Base", 1);
+		GamePiece base1 = new GamePiece("Client", 0);
 		gameFields.get(0).setPiece(base1);
-		GamePiece soldier1 = new GamePiece("Client", "Soldier", 2);
+		GamePiece soldier1 = new GamePiece("Client", 1);
 		gameFields.get(1).setPiece(soldier1);
 
-		GamePiece base2 = new GamePiece("Server", "Base", 3);
-		gameFields.get(399).setPiece(base2);
-		GamePiece soldier2 = new GamePiece("Server", "Soldier", 4);
-		gameFields.get(398).setPiece(soldier2);
+		GamePiece base2 = new GamePiece("Server", 0);
+		gameFields.get(FIELDCOUNTX*FIELDCOUNTY-1).setPiece(base2);
+		GamePiece soldier2 = new GamePiece("Server", 1);
+		gameFields.get(FIELDCOUNTX*FIELDCOUNTY-2).setPiece(soldier2);
+	}
+	
+	public void spawn(){
+		if(gameFields.get(basePos).getLower()!= null && gameFields.get(basePos).getLower().getPiece() == null){
+			gameFields.get(basePos).getLower().setPiece(randomNewPiece());
+		}
+		if(gameFields.get(basePos).getUp()!= null && gameFields.get(basePos).getUp().getPiece() == null){
+			gameFields.get(basePos).getUp().setPiece(randomNewPiece());
+		}
+		if(gameFields.get(basePos).getLowerLeft()!= null && gameFields.get(basePos).getLowerLeft().getPiece() == null){
+			gameFields.get(basePos).getLowerLeft().setPiece(randomNewPiece());
+		}
+		if(gameFields.get(basePos).getLowerRight()!= null && gameFields.get(basePos).getLowerRight().getPiece() == null){
+			gameFields.get(basePos).getLowerRight().setPiece(randomNewPiece());
+		}
+		if(gameFields.get(basePos).getUpperLeft()!= null && gameFields.get(basePos).getUpperLeft().getPiece() == null){
+			gameFields.get(basePos).getUpperLeft().setPiece(randomNewPiece());
+		}
+		if(gameFields.get(basePos).getUpperRight()!= null && gameFields.get(basePos).getUpperRight().getPiece() == null){
+			gameFields.get(basePos).getUpperRight().setPiece(randomNewPiece());
+		}
+	}
+	
+	public GamePiece randomNewPiece() {
+		return new GamePiece(player.getName(), rand.nextInt(2)+1);
+		
 	}
 
 	public void setGameFields() {
@@ -80,8 +113,8 @@ public class Board extends JPanel implements MouseInputListener,
 		int mx = width;
 		int my = height;
 		int flag = 0;
-		for (int j = 0; j < fieldCount; j++) {
-			for (int i = 0; i < fieldCount; i++) {
+		for (int j = 0; j < FIELDCOUNTX; j++) {
+			for (int i = 0; i < FIELDCOUNTY; i++) {
 				gameFields.add(new GameField(mx, my, rand.nextInt(2)));
 
 				my += height * 2;
@@ -166,7 +199,7 @@ public class Board extends JPanel implements MouseInputListener,
 				g2.drawRect(gf.getX() - PIECESIZE / 2, gf.getY() - PIECESIZE
 						/ 2, PIECESIZE, PIECESIZE);
 			} else {
-				g2.setColor(Color.LIGHT_GRAY);
+				g2.setColor(gf.getColor());
 				g2.fillRect(gf.getX() - PIECESIZE / 2, gf.getY() - PIECESIZE
 						/ 2, PIECESIZE, PIECESIZE);
 				g2.drawRect(gf.getX() - PIECESIZE / 2, gf.getY() - PIECESIZE
@@ -189,6 +222,7 @@ public class Board extends JPanel implements MouseInputListener,
 	public void moveGamePiece(int xAlt, int yAlt, int xNeu, int yNeu) {
 		getGameField(xNeu, yNeu).setPiece(getGameField(xAlt, yAlt).getPiece());
 		getGameField(xAlt, yAlt).setPiece(null);
+		getGameField(xNeu, yNeu).getPiece().setStepsLeft(0);
 	}
 
 	public Set<GameField> reachableGameFields(GameField gf, int steps) {
@@ -245,7 +279,7 @@ public class Board extends JPanel implements MouseInputListener,
 					&& clickedField.getPiece().getOwner()
 							.equals(player.getName())) {
 				reachableGameFields = reachableGameFields(clickedField,
-						clickedField.getPiece().getSteps());
+						clickedField.getPiece().getStepsLeft());
 			}
 		}
 	}
@@ -264,6 +298,7 @@ public class Board extends JPanel implements MouseInputListener,
 								releasedField.getX(), releasedField.getY());
 						moveGamePiece(clickedField.getX(), clickedField.getY(),
 								releasedField.getX(), releasedField.getY());
+						gf.getPiece().setStepsLeft(0);
 					}
 				}
 			}
@@ -305,6 +340,16 @@ public class Board extends JPanel implements MouseInputListener,
 	public void turn(){
 		output.turn();
 		turn = false;
+		resetSteps();
+	}
+	
+	public void resetSteps(){
+		for (GameField gf : gameFields) {
+			if((gf.getPiece()!= null) && (gf.getPiece().getOwner().equals(player.getName()))){
+				
+				gf.getPiece().setStepsLeft(gf.getPiece().getSteps());
+			}
+		}
 	}
 
 	@Override
