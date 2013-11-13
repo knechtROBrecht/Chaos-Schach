@@ -38,11 +38,17 @@ public class Input implements Runnable {
 					Integer.parseInt(str.split(",")[3]),
 					Integer.parseInt(str.split(",")[4]));
 		}
-		if (str.matches("c.*")) {
+		if (str.matches("b.*")) {
 			JOptionPane.showMessageDialog(null,
 					"Ihr Gegner hat das Spiel aufgegeben", "Gewonnen",
 					JOptionPane.WARNING_MESSAGE);
 			System.exit(0);
+		}
+		if (str.matches("c.*")){
+			board.create(Integer.parseInt(str.split(",")[1]),
+					Integer.parseInt(str.split(",")[2]),
+					str.split(",")[3],
+					Integer.parseInt(str.split(",")[4]));
 		}
 	}
 

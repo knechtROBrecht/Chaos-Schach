@@ -18,15 +18,16 @@ public class GamePiece {
 
 	public GamePiece(String owner, int type) {
 		this.owner = owner;
-		this.setType(type);
+		this.type = type;
 		switch (type) {
 		case 0:
 			initialize(0, 100, 10, Color.black, 1, "Base");
-
 			break;
 		case 1:
 			initialize(2, 10, 2, Color.WHITE,1,"Soldier");
-
+			break;			
+		case 2:
+			initialize(3, 10, 1, Color.CYAN,3,"Archer");
 			break;
 		default:
 			break;

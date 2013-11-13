@@ -3,13 +3,13 @@ package game;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+
 import javax.swing.*;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 
 @SuppressWarnings("serial")
-public class Board extends JPanel implements MouseInputListener,
-		ActionListener {
+public class Board extends JPanel implements MouseInputListener, ActionListener {
 
 	private final int FIELDHEIGHT = 30;
 	private final int FIELDWIDTH = 30;
@@ -17,13 +17,13 @@ public class Board extends JPanel implements MouseInputListener,
 	private final int PIECESIZE = (FIELDHEIGHT - DISTANCE);
 	private final int FIELDCOUNTX = 23;
 	private final int FIELDCOUNTY = 11;
-	
+
 	private int basePos;
 	private Player player;
 	private Input input;
 	private Output output;
 	private boolean turn;
-	
+
 	private ArrayList<GameField> gameFields = new ArrayList<GameField>();
 	private Set<GameField> reachableGameFields = new HashSet<GameField>();
 	private Timer time = new Timer(30, this);
@@ -35,7 +35,7 @@ public class Board extends JPanel implements MouseInputListener,
 		player = new Player("Server");
 		input = new Input(server, this);
 		output = new Output(server);
-		basePos = FIELDCOUNTX*FIELDCOUNTY-1;
+		basePos = FIELDCOUNTX * FIELDCOUNTY - 1;
 		turn = true;
 		init();
 	}
@@ -56,8 +56,7 @@ public class Board extends JPanel implements MouseInputListener,
 		this.requestFocus();
 		setGameFields();
 		setGamePieces();
-		
-		
+
 		time.start();
 	}
 
@@ -76,35 +75,59 @@ public class Board extends JPanel implements MouseInputListener,
 		gameFields.get(1).setPiece(soldier1);
 
 		GamePiece base2 = new GamePiece("Server", 0);
-		gameFields.get(FIELDCOUNTX*FIELDCOUNTY-1).setPiece(base2);
+		gameFields.get(FIELDCOUNTX * FIELDCOUNTY - 1).setPiece(base2);
 		GamePiece soldier2 = new GamePiece("Server", 1);
-		gameFields.get(FIELDCOUNTX*FIELDCOUNTY-2).setPiece(soldier2);
+		gameFields.get(FIELDCOUNTX * FIELDCOUNTY - 2).setPiece(soldier2);
 	}
-	
-	public void spawn(){
-		if(gameFields.get(basePos).getLower()!= null && gameFields.get(basePos).getLower().getPiece() == null){
-			gameFields.get(basePos).getLower().setPiece(randomNewPiece());
-		}
-		if(gameFields.get(basePos).getUp()!= null && gameFields.get(basePos).getUp().getPiece() == null){
-			gameFields.get(basePos).getUp().setPiece(randomNewPiece());
-		}
-		if(gameFields.get(basePos).getLowerLeft()!= null && gameFields.get(basePos).getLowerLeft().getPiece() == null){
-			gameFields.get(basePos).getLowerLeft().setPiece(randomNewPiece());
-		}
-		if(gameFields.get(basePos).getLowerRight()!= null && gameFields.get(basePos).getLowerRight().getPiece() == null){
-			gameFields.get(basePos).getLowerRight().setPiece(randomNewPiece());
-		}
-		if(gameFields.get(basePos).getUpperLeft()!= null && gameFields.get(basePos).getUpperLeft().getPiece() == null){
-			gameFields.get(basePos).getUpperLeft().setPiece(randomNewPiece());
-		}
-		if(gameFields.get(basePos).getUpperRight()!= null && gameFields.get(basePos).getUpperRight().getPiece() == null){
-			gameFields.get(basePos).getUpperRight().setPiece(randomNewPiece());
+
+	public void spawn() {
+		if (gameFields.get(basePos).getLower() != null
+				&& gameFields.get(basePos).getLower().getPiece() == null) {
+			GamePiece tmp = randomNewPiece();
+			gameFields.get(basePos).getLower().setPiece(tmp);
+			output.create("c", gameFields.get(basePos).getLower().getX(),
+					gameFields.get(basePos).getLower().getY(),
+					player.getName(), tmp.getType());
+		}else if (gameFields.get(basePos).getUp() != null
+				&& gameFields.get(basePos).getUp().getPiece() == null) {
+			GamePiece tmp = randomNewPiece();
+			gameFields.get(basePos).getUp().setPiece(tmp);
+			output.create("c", gameFields.get(basePos).getUp().getX(),
+					gameFields.get(basePos).getUp().getY(),
+					player.getName(), tmp.getType());
+		}else if (gameFields.get(basePos).getLowerLeft() != null
+				&& gameFields.get(basePos).getLowerLeft().getPiece() == null) {
+			GamePiece tmp = randomNewPiece();
+			gameFields.get(basePos).getLowerLeft().setPiece(tmp);
+			output.create("c", gameFields.get(basePos).getLowerLeft().getX(),
+					gameFields.get(basePos).getLowerLeft().getY(),
+					player.getName(), tmp.getType());
+		}else if (gameFields.get(basePos).getLowerRight() != null
+				&& gameFields.get(basePos).getLowerRight().getPiece() == null) {
+			GamePiece tmp = randomNewPiece();
+			gameFields.get(basePos).getLowerRight().setPiece(tmp);
+			output.create("c", gameFields.get(basePos).getLowerRight().getX(),
+					gameFields.get(basePos).getLowerRight().getY(),
+					player.getName(), tmp.getType());
+		}else if (gameFields.get(basePos).getUpperLeft() != null
+				&& gameFields.get(basePos).getUpperLeft().getPiece() == null) {
+			GamePiece tmp = randomNewPiece();
+			gameFields.get(basePos).getUpperLeft().setPiece(tmp);
+			output.create("c", gameFields.get(basePos).getUpperLeft().getX(),
+					gameFields.get(basePos).getUpperLeft().getY(),
+					player.getName(), tmp.getType());
+		}else if (gameFields.get(basePos).getUpperRight() != null
+				&& gameFields.get(basePos).getUpperRight().getPiece() == null) {
+			GamePiece tmp = randomNewPiece();
+			gameFields.get(basePos).getUpperRight().setPiece(tmp);
+			output.create("c", gameFields.get(basePos).getUpperRight().getX(),
+					gameFields.get(basePos).getUpperRight().getY(),
+					player.getName(), tmp.getType());
 		}
 	}
-	
+
 	public GamePiece randomNewPiece() {
-		return new GamePiece(player.getName(), rand.nextInt(2)+1);
-		
+		return new GamePiece(player.getName(), rand.nextInt(2) + 1);
 	}
 
 	public void setGameFields() {
@@ -233,31 +256,31 @@ public class Board extends JPanel implements MouseInputListener,
 						- gf.getUpperRight().getDifficulty());
 			}
 		}
-		if (!(gf.getLowerRight() == null|| gf.getLowerRight().getPiece() != null)) {
+		if (!(gf.getLowerRight() == null || gf.getLowerRight().getPiece() != null)) {
 			if (steps >= gf.getLowerRight().getDifficulty()) {
 				reachableGameFields(gf.getLowerRight(), steps
 						- gf.getLowerRight().getDifficulty());
 			}
 		}
-		if (!(gf.getLower() == null|| gf.getLower().getPiece() != null)) {
+		if (!(gf.getLower() == null || gf.getLower().getPiece() != null)) {
 			if (steps >= gf.getLower().getDifficulty()) {
 				reachableGameFields(gf.getLower(), steps
 						- gf.getLower().getDifficulty());
 			}
 		}
-		if (!(gf.getLowerLeft() == null|| gf.getLowerLeft().getPiece() != null)) {
+		if (!(gf.getLowerLeft() == null || gf.getLowerLeft().getPiece() != null)) {
 			if (steps >= gf.getLowerLeft().getDifficulty()) {
 				reachableGameFields(gf.getLowerLeft(), steps
 						- gf.getLowerLeft().getDifficulty());
 			}
 		}
-		if (!(gf.getUpperLeft() == null|| gf.getUpperLeft().getPiece() != null)) {
+		if (!(gf.getUpperLeft() == null || gf.getUpperLeft().getPiece() != null)) {
 			if (steps >= gf.getUpperLeft().getDifficulty()) {
 				reachableGameFields(gf.getUpperLeft(), steps
 						- gf.getUpperLeft().getDifficulty());
 			}
 		}
-		if (!(gf.getUp() == null|| gf.getUp().getPiece() != null)) {
+		if (!(gf.getUp() == null || gf.getUp().getPiece() != null)) {
 			if (steps >= gf.getUp().getDifficulty()) {
 				reachableGameFields(gf.getUp(), steps
 						- gf.getUp().getDifficulty());
@@ -324,29 +347,31 @@ public class Board extends JPanel implements MouseInputListener,
 	public void mouseMoved(MouseEvent event) {
 		GameField ngf = nearestField(event);
 		if (ngf.getPiece() != null) {
-			gameFrame.setTextArea(ngf.getPiece().toString(),ngf.getPiece().getOwner().equals(player.getName()));
+			gameFrame.setTextArea(ngf.getPiece().toString(), ngf.getPiece()
+					.getOwner().equals(player.getName()));
 		}
 	}
-	
-	public void addGameFrame(GameFrame gameFrame){
+
+	public void addGameFrame(GameFrame gameFrame) {
 		this.gameFrame = gameFrame;
 	}
-		
-	public void end(){
+
+	public void end() {
 		output.close();
 		System.exit(0);
 	}
-	
-	public void turn(){
+
+	public void turn() {
 		output.turn();
 		turn = false;
 		resetSteps();
 	}
-	
-	public void resetSteps(){
+
+	public void resetSteps() {
 		for (GameField gf : gameFields) {
-			if((gf.getPiece()!= null) && (gf.getPiece().getOwner().equals(player.getName()))){
-				
+			if ((gf.getPiece() != null)
+					&& (gf.getPiece().getOwner().equals(player.getName()))) {
+
 				gf.getPiece().setStepsLeft(gf.getPiece().getSteps());
 			}
 		}
@@ -370,6 +395,13 @@ public class Board extends JPanel implements MouseInputListener,
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
 
+	}
+
+	public void create(int x, int y, String player, int type) {
+		System.out.println(type);
+		GamePiece gp = new GamePiece(player,type);
+		System.out.println(gp);
+		getGameField(x,y).setPiece(gp);
 	}
 
 }

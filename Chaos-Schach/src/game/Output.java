@@ -33,9 +33,18 @@ public class Output {
 	
 	public void close(){
 		try {
-			dout.writeUTF("c");
+			dout.writeUTF("b");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void create(String string, int x, int y, String name, int type) {
+		try {
+			dout.writeUTF(string + "," + x  + "," + y + "," + name + "," + type);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 }
