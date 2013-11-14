@@ -78,14 +78,14 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 
 	public void setGamePieces() {
 		GamePiece base1 = new GamePiece("Client", 0);
-		gameFields.get(0).setPiece(base1);
+		gameFields.get(1).setPiece(base1);
 		GamePiece soldier1 = new GamePiece("Client", 1);
-		gameFields.get(1).setPiece(soldier1);
+		gameFields.get(2).setPiece(soldier1);
 
 		GamePiece base2 = new GamePiece("Server", 0);
-		gameFields.get(FIELDCOUNTX * FIELDCOUNTY - 1).setPiece(base2);
+		gameFields.get(FIELDCOUNTX * FIELDCOUNTY - 2).setPiece(base2);
 		GamePiece soldier2 = new GamePiece("Server", 1);
-		gameFields.get(FIELDCOUNTX * FIELDCOUNTY - 2).setPiece(soldier2);
+		gameFields.get(FIELDCOUNTX * FIELDCOUNTY - 3).setPiece(soldier2);
 	}
 
 	public void spawn() {
@@ -442,7 +442,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	
 	public void win(){
 		output.win();
-		JOptionPane.showMessageDialog(null,"Gegnerische Basis zerstört \nSie haben das Spiel gewonnen!","Gewonnen",JOptionPane.WARNING_MESSAGE);
+		JOptionPane.showMessageDialog(null,"Gegnerische Basis zerstï¿½rt \nSie haben das Spiel gewonnen!","Gewonnen",JOptionPane.WARNING_MESSAGE);
 		System.exit(0);
 	}
 
