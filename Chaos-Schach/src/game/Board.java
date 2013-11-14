@@ -20,7 +20,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 
 	private int basePos;
 	private int enemyBasePos;
-	private Player player;
+	private String player;
 	private Input input;
 	private Output output;
 	private boolean turn;
@@ -34,7 +34,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	private GameFrame gameFrame;
 
 	Board(Server server) {
-		player = new Player("Server");
+		player = "Server";
 		input = new Input(server, this);
 		output = new Output(server);
 		basePos = FIELDCOUNTX * FIELDCOUNTY - 1;
@@ -44,7 +44,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	}
 
 	Board(Client client) {
-		player = new Player("Client");
+		player = "Client";
 		input = new Input(client, this);
 		output = new Output(client);
 		basePos = 0;
@@ -95,47 +95,47 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 			gameFields.get(basePos).getLower().setPiece(tmp);
 			output.create("c", gameFields.get(basePos).getLower().getX(),
 					gameFields.get(basePos).getLower().getY(),
-					player.getName(), tmp.getType());
+					player, tmp.getType());
 		}else if (gameFields.get(basePos).getUp() != null
 				&& gameFields.get(basePos).getUp().getPiece() == null) {
 			GamePiece tmp = randomNewPiece();
 			gameFields.get(basePos).getUp().setPiece(tmp);
 			output.create("c", gameFields.get(basePos).getUp().getX(),
 					gameFields.get(basePos).getUp().getY(),
-					player.getName(), tmp.getType());
+					player, tmp.getType());
 		}else if (gameFields.get(basePos).getLowerLeft() != null
 				&& gameFields.get(basePos).getLowerLeft().getPiece() == null) {
 			GamePiece tmp = randomNewPiece();
 			gameFields.get(basePos).getLowerLeft().setPiece(tmp);
 			output.create("c", gameFields.get(basePos).getLowerLeft().getX(),
 					gameFields.get(basePos).getLowerLeft().getY(),
-					player.getName(), tmp.getType());
+					player, tmp.getType());
 		}else if (gameFields.get(basePos).getLowerRight() != null
 				&& gameFields.get(basePos).getLowerRight().getPiece() == null) {
 			GamePiece tmp = randomNewPiece();
 			gameFields.get(basePos).getLowerRight().setPiece(tmp);
 			output.create("c", gameFields.get(basePos).getLowerRight().getX(),
 					gameFields.get(basePos).getLowerRight().getY(),
-					player.getName(), tmp.getType());
+					player, tmp.getType());
 		}else if (gameFields.get(basePos).getUpperLeft() != null
 				&& gameFields.get(basePos).getUpperLeft().getPiece() == null) {
 			GamePiece tmp = randomNewPiece();
 			gameFields.get(basePos).getUpperLeft().setPiece(tmp);
 			output.create("c", gameFields.get(basePos).getUpperLeft().getX(),
 					gameFields.get(basePos).getUpperLeft().getY(),
-					player.getName(), tmp.getType());
+					player, tmp.getType());
 		}else if (gameFields.get(basePos).getUpperRight() != null
 				&& gameFields.get(basePos).getUpperRight().getPiece() == null) {
 			GamePiece tmp = randomNewPiece();
 			gameFields.get(basePos).getUpperRight().setPiece(tmp);
 			output.create("c", gameFields.get(basePos).getUpperRight().getX(),
 					gameFields.get(basePos).getUpperRight().getY(),
-					player.getName(), tmp.getType());
+					player, tmp.getType());
 		}
 	}
 
 	public GamePiece randomNewPiece() {
-		return new GamePiece(player.getName(), rand.nextInt(2) + 1);
+		return new GamePiece(player, rand.nextInt(2) + 1);
 	}
 
 	public void setGameFields() {
@@ -226,7 +226,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 				g2.fillRect(gf.getX() - PIECESIZE / 2, gf.getY() - PIECESIZE
 						/ 2, PIECESIZE, PIECESIZE);
 
-				if (gf.getPiece().getOwner().equals(player.getName())) {
+				if (gf.getPiece().getOwner().equals(player)) {
 					g2.setColor(Color.BLUE);
 				} else {
 					g2.setColor(Color.RED);
@@ -297,37 +297,37 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	public Set<GameField> attackableGameFields(GameField gf, int reach){
 		if ((gf.getUpperRight() != null && gf.getUpperRight().getPiece() == null)) {		
 				if(reach > 0) attackableGameFields(gf.getUpperRight(), reach-1);
-		}else if(gf.getUpperRight() != null && gf.getUpperRight().getPiece() != null && gf.getUpperRight().getPiece().getOwner() != player.getName()){
+		}else if(gf.getUpperRight() != null && gf.getUpperRight().getPiece() != null && gf.getUpperRight().getPiece().getOwner() != player){
 			if(reach > 0){ attackableGameFields.add(gf.getUpperRight());
 			attackableGameFields(gf.getUpperRight(), reach-1);}
 		}
 		if ((gf.getLowerRight() != null && gf.getLowerRight().getPiece() == null)) {
 			if(reach > 0) attackableGameFields(gf.getLowerRight(), reach-1);
-		}else if(gf.getLowerRight() != null && gf.getLowerRight().getPiece() != null && gf.getLowerRight().getPiece().getOwner() != player.getName()){
+		}else if(gf.getLowerRight() != null && gf.getLowerRight().getPiece() != null && gf.getLowerRight().getPiece().getOwner() != player){
 			if(reach > 0){ attackableGameFields.add(gf.getLowerRight());
 			attackableGameFields(gf.getLowerRight(), reach-1);}
 		}
 		if ((gf.getLower() != null && gf.getLower().getPiece() == null)) {
 			if(reach > 0) attackableGameFields(gf.getLower(), reach-1);
-		}else if(gf.getLower() != null && gf.getLower().getPiece() != null && gf.getLower().getPiece().getOwner() != player.getName()){
+		}else if(gf.getLower() != null && gf.getLower().getPiece() != null && gf.getLower().getPiece().getOwner() != player){
 			if(reach > 0){ attackableGameFields.add(gf.getLower());
 			attackableGameFields(gf.getLower(), reach-1);}
 		}
 		if ((gf.getLowerLeft() != null && gf.getLowerLeft().getPiece() == null)) {
 			if(reach > 0) attackableGameFields(gf.getLowerLeft(), reach-1);
-		}else if(gf.getLowerLeft() != null && gf.getLowerLeft().getPiece() != null && gf.getLowerLeft().getPiece().getOwner() != player.getName()){
+		}else if(gf.getLowerLeft() != null && gf.getLowerLeft().getPiece() != null && gf.getLowerLeft().getPiece().getOwner() != player){
 			if(reach > 0){ attackableGameFields.add(gf.getLowerLeft());
 			attackableGameFields(gf.getLowerLeft(), reach-1);}
 		}
 		if ((gf.getUpperLeft() != null && gf.getUpperLeft().getPiece() == null)) {
 			if(reach > 0) attackableGameFields(gf.getUpperLeft(), reach-1);
-		}else if(gf.getUpperLeft() != null && gf.getUpperLeft().getPiece() != null && gf.getUpperLeft().getPiece().getOwner() != player.getName()){
+		}else if(gf.getUpperLeft() != null && gf.getUpperLeft().getPiece() != null && gf.getUpperLeft().getPiece().getOwner() != player){
 			if(reach > 0){ attackableGameFields.add(gf.getUpperLeft());
 			attackableGameFields(gf.getUpperLeft(), reach-1);}
 		}
 		if ((gf.getUp() != null && gf.getUp().getPiece() == null)) {
 			if(reach > 0) attackableGameFields(gf.getUp(), reach-1);
-		}else if(gf.getUp() != null && gf.getUp().getPiece() != null && gf.getUp().getPiece().getOwner() != player.getName()){
+		}else if(gf.getUp() != null && gf.getUp().getPiece() != null && gf.getUp().getPiece().getOwner() != player){
 			if(reach > 0){ attackableGameFields.add(gf.getUp());
 			attackableGameFields(gf.getUp(), reach-1);}
 		}
@@ -344,7 +344,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 			clickedField = nearestField(event);
 			if (clickedField.getPiece() != null
 					&& clickedField.getPiece().getOwner()
-							.equals(player.getName())) {
+							.equals(player)) {
 				reachableGameFields = reachableGameFields(clickedField,
 						clickedField.getPiece().getStepsLeft());
 				if(clickedField.getPiece().getAtk()){
@@ -420,7 +420,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		GameField ngf = nearestField(event);
 		if (ngf.getPiece() != null) {
 			gameFrame.setTextArea(ngf.getPiece().toString(), ngf.getPiece()
-					.getOwner().equals(player.getName()));
+					.getOwner().equals(player));
 		}
 	}
 
@@ -449,7 +449,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	public void resetStatus() {
 		for (GameField gf : gameFields) {
 			if ((gf.getPiece() != null)
-					&& (gf.getPiece().getOwner().equals(player.getName()))) {
+					&& (gf.getPiece().getOwner().equals(player))) {
 
 				gf.getPiece().setStepsLeft(gf.getPiece().getSteps());
 				gf.getPiece().setAtk(true);
