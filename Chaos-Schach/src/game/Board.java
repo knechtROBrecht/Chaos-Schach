@@ -41,8 +41,8 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		player = "Server";
 		input = new Input(server, this);
 		output = new Output(server);
-		basePos = FIELDCOUNTX * FIELDCOUNTY - 1;
-		enemyBasePos = 0;
+		basePos = FIELDCOUNTX * FIELDCOUNTY - 2;
+		enemyBasePos = 1;
 		turn = true;
 		init();
 	}
@@ -55,8 +55,8 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		player = "Client";
 		input = new Input(client, this);
 		output = new Output(client);
-		basePos = 0;
-		enemyBasePos = FIELDCOUNTX * FIELDCOUNTY - 1;
+		basePos = 1;
+		enemyBasePos = FIELDCOUNTX * FIELDCOUNTY - 2;
 		turn = false;
 		init();
 	}
@@ -169,7 +169,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	}
 
 	/**
-	 * Erzeugt die einzelnen Spielfelder mit einem zufaelligen Typen. Schafft außerdem direkt die Nachbarverbindungen der Spielfelder
+	 * Erzeugt die einzelnen Spielfelder mit einem zufaelligen Typen. Schafft auï¿½erdem direkt die Nachbarverbindungen der Spielfelder
 	 */
 	public void setGameFields() {
 		int height = FIELDHEIGHT;
