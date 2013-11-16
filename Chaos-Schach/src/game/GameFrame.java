@@ -19,7 +19,7 @@ import javax.swing.WindowConstants;
 public class GameFrame extends JFrame implements Runnable {
 
 	private JButton aufgeben;
-	private JButton turn; 
+	private JButton turn;
 	private JPanel westPanel;
 	private JLabel conn;
 	private String opt;
@@ -31,6 +31,11 @@ public class GameFrame extends JFrame implements Runnable {
 		this.opt = opt;
 	}
 
+	/**
+	 * @param board
+	 *            Fuegt dem GameFrame das Board hinzu und dem Board das
+	 *            GameFrame
+	 */
 	public void addBoard(Board board) {
 		this.board = board;
 		this.remove(conn);
@@ -40,6 +45,10 @@ public class GameFrame extends JFrame implements Runnable {
 		this.board.setBorder(BorderFactory.createLineBorder(Color.black));
 	}
 
+	/**
+	 * Laeuft bis der Thread interrupted wird und ist fuer das Erzeugen des
+	 * gesamten Spielemenues zustaendig (Turn Button, Surrender Button etc.)
+	 */
 	@Override
 	public void run() {
 		this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -50,23 +59,27 @@ public class GameFrame extends JFrame implements Runnable {
 
 		westPanel = new JPanel();
 		westPanel.setLayout(new BorderLayout());
-		westPanel.setPreferredSize(new Dimension(200,720));
+		westPanel.setPreferredSize(new Dimension(200, 720));
 		aufgeben = new JButton("Aufgeben");
-		aufgeben.setPreferredSize(new Dimension(200,80));
+		aufgeben.setPreferredSize(new Dimension(200, 80));
 		aufgeben.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(board != null){
-					JOptionPane.showMessageDialog(null,"Sie haben das Spiel aufgegeben","Verloren",JOptionPane.WARNING_MESSAGE);
+				if (board != null) {
+					JOptionPane.showMessageDialog(null,
+							"Sie haben das Spiel aufgegeben", "Verloren",
+							JOptionPane.WARNING_MESSAGE);
 					board.end();
-				}else System.exit(0);
+				} else
+					System.exit(0);
 			}
 		});
 		turn = new JButton("Turn");
-		turn.setPreferredSize(new Dimension(200,100));
-		turn.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				if(board != null){
-					if(board.getTurn()) board.turn();
+		turn.setPreferredSize(new Dimension(200, 100));
+		turn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (board != null) {
+					if (board.getTurn())
+						board.turn();
 				}
 			}
 		});
@@ -77,9 +90,9 @@ public class GameFrame extends JFrame implements Runnable {
 		southButtons.add(turn, BorderLayout.NORTH);
 		southButtons.add(aufgeben, BorderLayout.CENTER);
 		yourTurn = new JLabel();
-		yourTurn.setPreferredSize(new Dimension(200,200));
+		yourTurn.setPreferredSize(new Dimension(200, 200));
 		yourTurn.setOpaque(true);
-		yourTurn.setHorizontalAlignment( JLabel.CENTER );
+		yourTurn.setHorizontalAlignment(JLabel.CENTER);
 		westPanel.add(textArea, BorderLayout.NORTH);
 		westPanel.add(yourTurn, BorderLayout.CENTER);
 		westPanel.add(southButtons, BorderLayout.SOUTH);
@@ -100,27 +113,35 @@ public class GameFrame extends JFrame implements Runnable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}	
+		}
 
 	}
-	
-	public void setTextArea(String str, Boolean bl){
+
+	/**
+	 * @param str
+	 * @param bl
+	 * Schreibt in die TextArea ueber welche Spielfigur die Maus gerade hovered
+	 */
+	public void setTextArea(String str, Boolean bl) {
 		textArea.setText("");
 		textArea.setText(str);
-		if(bl){ 
+		if (bl) {
 			textArea.append("your figure");
 			textArea.setForeground(new Color(0x00, 0xC0, 0x00));
-		}else{
+		} else {
 			textArea.append("enemys figure");
 			textArea.setForeground(Color.red);
 		}
 	}
-	
-	public void changeTurnStatus(){
-		if(board.getTurn()){
+
+	/**
+	 * Zeigt an wer an der Reihe ist
+	 */
+	public void changeTurnStatus() {
+		if (board.getTurn()) {
 			yourTurn.setText("Sie sind am Zug!");
 			yourTurn.setBackground(Color.green);
-		}else{
+		} else {
 			yourTurn.setText("Ihr Gegner ist am Zug!");
 			yourTurn.setBackground(Color.gray);
 		}

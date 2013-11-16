@@ -14,6 +14,10 @@ public class Mainmenu extends JFrame {
 	private JButton tut;
 	private JButton opt;
 
+	/**
+	 * Konstruktor erzeugt die Knoepfe fuer das Startfenster und setzt die
+	 * jeweiligen ActionListener
+	 */
 	Mainmenu() {
 		this.setTitle("Chaos-Schach");
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -53,13 +57,13 @@ public class Mainmenu extends JFrame {
 				System.out.println("options is pressed");
 			}
 		});
-		
+
 		panel.add(host);
 		panel.add(conn);
 		panel.add(tut);
 		panel.add(opt);
-		
-		this.add(panel,BorderLayout.CENTER);
+
+		this.add(panel, BorderLayout.CENTER);
 		this.setVisible(true);
 	}
 

@@ -33,6 +33,10 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	private Random rand = new Random(20071969);
 	private GameFrame gameFrame;
 
+	/**
+	 * @param server
+	 * Konstruktor des Boards fuer den Server
+	 */
 	Board(Server server) {
 		player = "Server";
 		input = new Input(server, this);
@@ -43,6 +47,10 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		init();
 	}
 
+	/**
+	 * @param client
+	 * Konstruktor des Boards fuer den Client
+	 */
 	Board(Client client) {
 		player = "Client";
 		input = new Input(client, this);
@@ -53,6 +61,9 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		init();
 	}
 
+	/**
+	 * Hilfsmethode welche vom Konstruktor aufgerufen wird welche den Input Thread startet, Listener added, Spielfelder und Spielfiguren erzeugt und die "Gameloop" startet
+	 */
 	private void init() {
 		(new Thread(input)).start();
 		addMouseListener(this);
@@ -64,18 +75,31 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		time.start();
 	}
 
+	/**
+	 * @return Gibt zurueck ob man an der Reihe ist
+	 */
 	public boolean getTurn() {
 		return turn;
 	}
 
+	/**
+	 * @param turn
+	 * Setzt ob man an der Reihe ist
+	 */
 	public void setTurn(boolean turn) {
 		this.turn = turn;
 	}
 	
+	/**
+	 * Ruft die Methode im GameFrame auf welche anzeigt wer an der Reihe ist
+	 */
 	public void changeTurnStatus(){
 		gameFrame.changeTurnStatus();
 	}
 
+	/**
+	 *  Setzt in das obere linke und das untere rechte Eck des Spielfeldes die Basis Steine und bereits einen Soldaten
+	 */
 	public void setGamePieces() {
 		GamePiece base1 = new GamePiece("Client", 0);
 		gameFields.get(1).setPiece(base1);
@@ -88,6 +112,9 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		gameFields.get(FIELDCOUNTX * FIELDCOUNTY - 3).setPiece(soldier2);
 	}
 
+	/**
+	 *  Setzt an die erste Position neben der Basis welche er findet zufaellig einen neuen Spielstein
+	 */
 	public void spawn() {
 		if (gameFields.get(basePos).getLower() != null
 				&& gameFields.get(basePos).getLower().getPiece() == null) {
@@ -134,10 +161,16 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		}
 	}
 
+	/**
+	 * @return Gibt einen neuen Spielstein von einem zufaelligen Typen zurueck
+	 */
 	public GamePiece randomNewPiece() {
 		return new GamePiece(player, rand.nextInt(2) + 1);
 	}
 
+	/**
+	 * Erzeugt die einzelnen Spielfelder mit einem zufaelligen Typen. Schafft auﬂerdem direkt die Nachbarverbindungen der Spielfelder
+	 */
 	public void setGameFields() {
 		int height = FIELDHEIGHT;
 		int width = FIELDWIDTH;
@@ -245,6 +278,11 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 
 	}
 
+	/**
+	 * @param x
+	 * @param y
+	 * @return Gibt das Spielfeld an der Position x,y zurueck
+	 */
 	public GameField getGameField(int x, int y) {
 		for (GameField gf : gameFields) {
 
@@ -255,6 +293,11 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		return null;
 	}
 
+	/**
+	 * @param gf
+	 * @param steps
+	 * @return Gibt eine Menge mit den von einem bestimmten Spielfeld ueber eine bestimmte Schritteanzahl erreichbarer Spielfelder zurueck
+	 */
 	public Set<GameField> reachableGameFields(GameField gf, int steps) {
 		reachableGameFields.add(gf);
 		if (!(gf.getUpperRight() == null || gf.getUpperRight().getPiece() != null)) {
@@ -295,6 +338,12 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		}
 		return reachableGameFields;
 	}
+	
+	/**
+	 * @param gf
+	 * @param steps
+	 * @return Gibt eine Menge mit den von einem bestimmten Spielfeld ueber eine bestimmte Schritteanzahl angreifbarer Spielfelder zurueck
+	 */
 	public Set<GameField> attackableGameFields(GameField gf, int reach){
 		if ((gf.getUpperRight() != null && gf.getUpperRight().getPiece() == null)) {		
 				if(reach > 0) attackableGameFields(gf.getUpperRight(), reach-1);
@@ -335,10 +384,12 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		return attackableGameFields;
 	}
 
+
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		this.repaint();
 	}
+
 
 	public void mousePressed(MouseEvent event) {
 		if (turn) {
@@ -386,6 +437,13 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		}
 	}
 	
+	/**
+	 * @param xAlt
+	 * @param yAlt
+	 * @param xNeu
+	 * @param yNeu
+	 * Spielstein an der Position xAlt, yAlt greift Spielstein an der Position xNeu, yNeu an
+	 */
 	public void attack(int xAlt, int yAlt, int xNeu, int yNeu){
 		if(getGameField(xNeu,yNeu).getPiece().getHp() <= getGameField(xAlt,yAlt).getPiece().getAttack()){
 			getGameField(xNeu,yNeu).setPiece(null);
@@ -402,6 +460,10 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		getGameField(xNeu, yNeu).getPiece().setStepsLeft(0);
 	}
 
+	/**
+	 * @param event
+	 * @return Gibt das vom Mausclick am wenigsten entfernte Spielfeld zurueck
+	 */
 	public GameField nearestField(MouseEvent event) {
 		GameField nearestGameField = gameFields.get(0);
 		for (GameField gf : gameFields) {
@@ -416,6 +478,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		return nearestGameField;
 	}
 
+
 	@Override
 	public void mouseMoved(MouseEvent event) {
 		GameField ngf = nearestField(event);
@@ -425,15 +488,25 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		}
 	}
 
+	/**
+	 * @param gameFrame
+	 * Fuegt GameFrame zum Board hinzu
+	 */
 	public void addGameFrame(GameFrame gameFrame) {
 		this.gameFrame = gameFrame;
 	}
 
+	/**
+	 * Spiel wird beendet
+	 */
 	public void end() {
 		output.close();
 		System.exit(0);
 	}
 
+	/**
+	 * Gibt den Zug an den Gegner ab
+	 */
 	public void turn() {
 		output.turn();
 		turn = false;
@@ -441,6 +514,9 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		resetStatus();
 	}
 	
+	/**
+	 * Spiel gewonnen
+	 */
 	public void win(){
 		output.win();
 		JOptionPane.showMessageDialog(null,"Gegnerische Basis zerstÔøΩrt \nSie haben das Spiel gewonnen!","Gewonnen",JOptionPane.WARNING_MESSAGE);
@@ -478,6 +554,13 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 
 	}
 
+	/**
+	 * @param x
+	 * @param y
+	 * @param player
+	 * @param type
+	 * Erzeugt eine neue Spielfigur an der Stelle x,y vom Typ type und der Besitzer ist player
+	 */
 	public void create(int x, int y, String player, int type) {
 		getGameField(x,y).setPiece(new GamePiece(player,type));
 	}
