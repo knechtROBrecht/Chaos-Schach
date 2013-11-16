@@ -146,7 +146,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		int flag = 0;
 		for (int j = 0; j < FIELDCOUNTX; j++) {
 			for (int i = 0; i < FIELDCOUNTY; i++) {
-				gameFields.add(new GameField(mx, my, rand.nextInt(2)));
+				gameFields.add(new GameField(mx, my, rand.nextInt(3)));
 
 				my += height * 2;
 			}
@@ -173,6 +173,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 					gf.getY() - height));
 		}
 	}
+
 
 	public void paint(Graphics g) {
 		super.paintComponent(g);

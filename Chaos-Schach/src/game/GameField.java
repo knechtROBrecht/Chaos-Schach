@@ -26,7 +26,11 @@ public class GameField {
 			initialize(Color.yellow, 1, "Plane");
 		} else if (type == 1) {
 			initialize(Color.darkGray, 2, "Swamp");
+		} else if (type == 2) {
+			initialize(Color.white, 1, "Ice");
+			//FIXME difficulty 0 funktioniert nicht.
 		}
+		
 	}
 
 	private void initialize(Color color, int difficulty, String name) {
