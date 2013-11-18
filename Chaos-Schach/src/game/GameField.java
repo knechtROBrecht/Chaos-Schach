@@ -1,15 +1,11 @@
 package game;
 
 import java.awt.Color;
+import java.util.*;
 
 public class GameField {
 
-	private GameField upperRight;
-	private GameField lowerRight;
-	private GameField lower;
-	private GameField lowerLeft;
-	private GameField upperLeft;
-	private GameField up;
+	private Set<GameField> neighbors = new HashSet<GameField>();
 	private int difficulty = 1;
 	private int x;
 	private int y;
@@ -92,93 +88,18 @@ public class GameField {
 	}
 
 	/**
-	 * @return Gibt das obere rechte Nachbarfeld zurueck
+	 * @param gf
+	 * 			fügt ein Nachbarfeld hinzu
 	 */
-	public GameField getUpperRight() {
-		return upperRight;
+	public void addNeighbor(GameField gf) {
+		neighbors.add(gf);
 	}
 
 	/**
-	 * @param upperRight
-	 *            Setzt das obere rechte Nachbarfeld
+	 * @return gibt das Set aller Nachbarn zurück
 	 */
-	public void setUpperRight(GameField upperRight) {
-		this.upperRight = upperRight;
-	}
-
-	/**
-	 * @return Gibt das untere rechte Nachbarfeld zurueck
-	 */
-	public GameField getLowerRight() {
-		return lowerRight;
-	}
-
-	/**
-	 * @param lowerRight
-	 *            Setzt das untere rechte Nachbarfeld
-	 */
-	public void setLowerRight(GameField lowerRight) {
-		this.lowerRight = lowerRight;
-	}
-
-	/**
-	 * @return Gibt das untere Nachbarfeld zurueck
-	 */
-	public GameField getLower() {
-		return lower;
-	}
-
-	/**
-	 * @param lower
-	 *            Setzt das untere Nachbarfeld
-	 */
-	public void setLower(GameField lower) {
-		this.lower = lower;
-	}
-
-	/**
-	 * @return Gibt das untere linke Nachbarfeld zurueck
-	 */
-	public GameField getLowerLeft() {
-		return lowerLeft;
-	}
-
-	/**
-	 * @param lowerLeft
-	 *            Setzt das untere linke Nachbarfeld
-	 */
-	public void setLowerLeft(GameField lowerLeft) {
-		this.lowerLeft = lowerLeft;
-	}
-
-	/**
-	 * @return Gibt das obere linke Nachbarfeld zurueck
-	 */
-	public GameField getUpperLeft() {
-		return upperLeft;
-	}
-
-	/**
-	 * @param upperLeft
-	 *            Setzt das obere linke Nachbarfeld
-	 */
-	public void setUpperLeft(GameField upperLeft) {
-		this.upperLeft = upperLeft;
-	}
-
-	/**
-	 * @return Gibt das obere Nachbarfeld zurueck
-	 */
-	public GameField getUp() {
-		return up;
-	}
-
-	/**
-	 * @param up
-	 *            Setzt das obere Nachbarfeld
-	 */
-	public void setUp(GameField up) {
-		this.up = up;
+	public Set<GameField> getNeighbors() {
+		return neighbors;
 	}
 
 	/**

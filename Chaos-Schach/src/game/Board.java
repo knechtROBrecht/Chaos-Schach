@@ -116,48 +116,15 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	 *  Setzt an die erste Position neben der Basis welche er findet zufaellig einen neuen Spielstein
 	 */
 	public void spawn() {
-		if (gameFields.get(basePos).getLower() != null
-				&& gameFields.get(basePos).getLower().getPiece() == null) {
-			GamePiece tmp = randomNewPiece();
-			gameFields.get(basePos).getLower().setPiece(tmp);
-			output.create("c", gameFields.get(basePos).getLower().getX(),
-					gameFields.get(basePos).getLower().getY(),
-					player, tmp.getType());
-		}else if (gameFields.get(basePos).getUp() != null
-				&& gameFields.get(basePos).getUp().getPiece() == null) {
-			GamePiece tmp = randomNewPiece();
-			gameFields.get(basePos).getUp().setPiece(tmp);
-			output.create("c", gameFields.get(basePos).getUp().getX(),
-					gameFields.get(basePos).getUp().getY(),
-					player, tmp.getType());
-		}else if (gameFields.get(basePos).getLowerLeft() != null
-				&& gameFields.get(basePos).getLowerLeft().getPiece() == null) {
-			GamePiece tmp = randomNewPiece();
-			gameFields.get(basePos).getLowerLeft().setPiece(tmp);
-			output.create("c", gameFields.get(basePos).getLowerLeft().getX(),
-					gameFields.get(basePos).getLowerLeft().getY(),
-					player, tmp.getType());
-		}else if (gameFields.get(basePos).getLowerRight() != null
-				&& gameFields.get(basePos).getLowerRight().getPiece() == null) {
-			GamePiece tmp = randomNewPiece();
-			gameFields.get(basePos).getLowerRight().setPiece(tmp);
-			output.create("c", gameFields.get(basePos).getLowerRight().getX(),
-					gameFields.get(basePos).getLowerRight().getY(),
-					player, tmp.getType());
-		}else if (gameFields.get(basePos).getUpperLeft() != null
-				&& gameFields.get(basePos).getUpperLeft().getPiece() == null) {
-			GamePiece tmp = randomNewPiece();
-			gameFields.get(basePos).getUpperLeft().setPiece(tmp);
-			output.create("c", gameFields.get(basePos).getUpperLeft().getX(),
-					gameFields.get(basePos).getUpperLeft().getY(),
-					player, tmp.getType());
-		}else if (gameFields.get(basePos).getUpperRight() != null
-				&& gameFields.get(basePos).getUpperRight().getPiece() == null) {
-			GamePiece tmp = randomNewPiece();
-			gameFields.get(basePos).getUpperRight().setPiece(tmp);
-			output.create("c", gameFields.get(basePos).getUpperRight().getX(),
-					gameFields.get(basePos).getUpperRight().getY(),
-					player, tmp.getType());
+		GameField tmp = gameFields.get(basePos);
+		
+		for (GameField gf : tmp.getNeighbors()) {
+			if(gf != null && gf.getPiece() == null){
+				GamePiece temp = randomNewPiece();
+				gf.setPiece(temp);
+				output.create("c", gf.getX(), gf.getY(), player, temp.getType());
+				break;
+			}
 		}
 	}
 
@@ -194,15 +161,15 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		}
 
 		for (GameField gf : gameFields) {
-			gf.setLower(getGameField(gf.getX(), gf.getY() + 2 * height));
-			gf.setLowerLeft(getGameField((int) (gf.getX() - 1.5 * width),
+			gf.addNeighbor(getGameField(gf.getX(), gf.getY() + 2 * height));
+			gf.addNeighbor(getGameField((int) (gf.getX() - 1.5 * width),
 					gf.getY() + height));
-			gf.setLowerRight(getGameField((int) (gf.getX() + 1.5 * width),
+			gf.addNeighbor(getGameField((int) (gf.getX() + 1.5 * width),
 					gf.getY() + height));
-			gf.setUp(getGameField(gf.getX(), gf.getY() - 2 * height));
-			gf.setUpperLeft(getGameField((int) (gf.getX() - 1.5 * width),
+			gf.addNeighbor(getGameField(gf.getX(), gf.getY() - 2 * height));
+			gf.addNeighbor(getGameField((int) (gf.getX() - 1.5 * width),
 					gf.getY() - height));
-			gf.setUpperRight(getGameField((int) (gf.getX() + 1.5 * width),
+			gf.addNeighbor(getGameField((int) (gf.getX() + 1.5 * width),
 					gf.getY() - height));
 		}
 	}
@@ -300,40 +267,9 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	 */
 	public Set<GameField> reachableGameFields(GameField gf, int steps) {
 		reachableGameFields.add(gf);
-		if (!(gf.getUpperRight() == null || gf.getUpperRight().getPiece() != null)) {
-			if (steps >= gf.getUpperRight().getDifficulty()) {
-				reachableGameFields(gf.getUpperRight(), steps
-						- gf.getUpperRight().getDifficulty());
-			}
-		}
-		if (!(gf.getLowerRight() == null || gf.getLowerRight().getPiece() != null)) {
-			if (steps >= gf.getLowerRight().getDifficulty()) {
-				reachableGameFields(gf.getLowerRight(), steps
-						- gf.getLowerRight().getDifficulty());
-			}
-		}
-		if (!(gf.getLower() == null || gf.getLower().getPiece() != null)) {
-			if (steps >= gf.getLower().getDifficulty()) {
-				reachableGameFields(gf.getLower(), steps
-						- gf.getLower().getDifficulty());
-			}
-		}
-		if (!(gf.getLowerLeft() == null || gf.getLowerLeft().getPiece() != null)) {
-			if (steps >= gf.getLowerLeft().getDifficulty()) {
-				reachableGameFields(gf.getLowerLeft(), steps
-						- gf.getLowerLeft().getDifficulty());
-			}
-		}
-		if (!(gf.getUpperLeft() == null || gf.getUpperLeft().getPiece() != null)) {
-			if (steps >= gf.getUpperLeft().getDifficulty()) {
-				reachableGameFields(gf.getUpperLeft(), steps
-						- gf.getUpperLeft().getDifficulty());
-			}
-		}
-		if (!(gf.getUp() == null || gf.getUp().getPiece() != null)) {
-			if (steps >= gf.getUp().getDifficulty()) {
-				reachableGameFields(gf.getUp(), steps
-						- gf.getUp().getDifficulty());
+		for (GameField tmp : gf.getNeighbors()) {
+			if(tmp != null && tmp.getPiece() == null){
+				if(steps >= tmp.getDifficulty()) reachableGameFields(tmp,steps-tmp.getDifficulty());
 			}
 		}
 		return reachableGameFields;
@@ -345,41 +281,16 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	 * @return Gibt eine Menge mit den von einem bestimmten Spielfeld ueber eine bestimmte Schritteanzahl angreifbarer Spielfelder zurueck
 	 */
 	public Set<GameField> attackableGameFields(GameField gf, int reach){
-		if ((gf.getUpperRight() != null && gf.getUpperRight().getPiece() == null)) {		
-				if(reach > 0) attackableGameFields(gf.getUpperRight(), reach-1);
-		}else if(gf.getUpperRight() != null && gf.getUpperRight().getPiece() != null && gf.getUpperRight().getPiece().getOwner() != player){
-			if(reach > 0){ attackableGameFields.add(gf.getUpperRight());
-			attackableGameFields(gf.getUpperRight(), reach-1);}
-		}
-		if ((gf.getLowerRight() != null && gf.getLowerRight().getPiece() == null)) {
-			if(reach > 0) attackableGameFields(gf.getLowerRight(), reach-1);
-		}else if(gf.getLowerRight() != null && gf.getLowerRight().getPiece() != null && gf.getLowerRight().getPiece().getOwner() != player){
-			if(reach > 0){ attackableGameFields.add(gf.getLowerRight());
-			attackableGameFields(gf.getLowerRight(), reach-1);}
-		}
-		if ((gf.getLower() != null && gf.getLower().getPiece() == null)) {
-			if(reach > 0) attackableGameFields(gf.getLower(), reach-1);
-		}else if(gf.getLower() != null && gf.getLower().getPiece() != null && gf.getLower().getPiece().getOwner() != player){
-			if(reach > 0){ attackableGameFields.add(gf.getLower());
-			attackableGameFields(gf.getLower(), reach-1);}
-		}
-		if ((gf.getLowerLeft() != null && gf.getLowerLeft().getPiece() == null)) {
-			if(reach > 0) attackableGameFields(gf.getLowerLeft(), reach-1);
-		}else if(gf.getLowerLeft() != null && gf.getLowerLeft().getPiece() != null && gf.getLowerLeft().getPiece().getOwner() != player){
-			if(reach > 0){ attackableGameFields.add(gf.getLowerLeft());
-			attackableGameFields(gf.getLowerLeft(), reach-1);}
-		}
-		if ((gf.getUpperLeft() != null && gf.getUpperLeft().getPiece() == null)) {
-			if(reach > 0) attackableGameFields(gf.getUpperLeft(), reach-1);
-		}else if(gf.getUpperLeft() != null && gf.getUpperLeft().getPiece() != null && gf.getUpperLeft().getPiece().getOwner() != player){
-			if(reach > 0){ attackableGameFields.add(gf.getUpperLeft());
-			attackableGameFields(gf.getUpperLeft(), reach-1);}
-		}
-		if ((gf.getUp() != null && gf.getUp().getPiece() == null)) {
-			if(reach > 0) attackableGameFields(gf.getUp(), reach-1);
-		}else if(gf.getUp() != null && gf.getUp().getPiece() != null && gf.getUp().getPiece().getOwner() != player){
-			if(reach > 0){ attackableGameFields.add(gf.getUp());
-			attackableGameFields(gf.getUp(), reach-1);}
+		
+		for (GameField tmp : gf.getNeighbors()) {
+			if(tmp != null && tmp.getPiece() == null){
+				if(reach > 0) attackableGameFields(tmp, reach-1);
+			}else if(tmp != null && tmp.getPiece() != null && tmp.getPiece().getOwner() != player){
+				if(reach > 0 ){
+					attackableGameFields.add(tmp);
+					attackableGameFields(tmp, reach -1);
+				}
+			}
 		}
 		return attackableGameFields;
 	}
