@@ -107,13 +107,11 @@ public class GameFrame extends JFrame implements Runnable {
 			if (opt.equals("s")) {
 				this.setTitle("Server");
 				new Server(this);
-				yourTurn.setText("Sie sind am Zug!");
-				yourTurn.setBackground(Color.green);
+				changeTurnStatus();
 			} else if (opt.equals("c")) {
 				this.setTitle("Client");
 				new Client(this);
-				yourTurn.setText("Ihr Gegner ist am Zug!");
-				yourTurn.setBackground(Color.gray);
+				changeTurnStatus();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
