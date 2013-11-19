@@ -1,7 +1,11 @@
 package game;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.*;
+
+import javax.imageio.ImageIO;
 
 public class GameField {
 
@@ -13,6 +17,7 @@ public class GameField {
 	private int type;
 	private String name;
 	private Color color;
+	private BufferedImage img;
 
 	/**
 	 * @param x
@@ -26,11 +31,11 @@ public class GameField {
 		this.y = y;
 		this.type = type;
 		if (type == 0) {
-			initialize(Color.yellow, 1, "Plane");
+			initialize(Color.yellow, 1, "Plane", "images/test.png");
 		} else if (type == 1) {
-			initialize(Color.darkGray, 2, "Swamp");
+			initialize(Color.darkGray, 2, "Swamp", "images/test.png");
 		} else if (type == 2) {
-			initialize(Color.white, 1, "Ice");
+			initialize(Color.white, 1, "Ice", "images/test.png");
 			// FIXME difficulty 0 funktioniert nicht.
 		}
 
@@ -42,10 +47,16 @@ public class GameField {
 	 * @param name
 	 *            Hilfsmethode des Konstruktors zum Festlegen bestimmter Werte
 	 */
-	private void initialize(Color color, int difficulty, String name) {
+	private void initialize(Color color, int difficulty, String name, String url) {
 		this.setColor(color);
 		this.difficulty = difficulty;
 		this.setName(name);
+		ClassLoader cldr = this.getClass().getClassLoader();
+		try {
+			img = ImageIO.read(cldr.getResource(url));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -165,6 +176,10 @@ public class GameField {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public BufferedImage getImg(){
+		return img;
 	}
 
 }

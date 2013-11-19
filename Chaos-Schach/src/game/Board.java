@@ -112,6 +112,19 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		gameFields.get(FIELDCOUNTX * FIELDCOUNTY - 2).setPiece(base2);
 		GamePiece soldier2 = new GamePiece("Server", 1);
 		gameFields.get(FIELDCOUNTX * FIELDCOUNTY - 3).setPiece(soldier2);
+
+		gameFields.get(100).setPiece(new GamePiece("Server", 2));
+		gameFields.get(101).setPiece(new GamePiece("Server", 2));
+		gameFields.get(102).setPiece(new GamePiece("Server", 2));
+		gameFields.get(103).setPiece(new GamePiece("Server", 2));
+		gameFields.get(104).setPiece(new GamePiece("Server", 2));
+		gameFields.get(105).setPiece(new GamePiece("Client", 2));
+		gameFields.get(106).setPiece(new GamePiece("Client", 2));
+		gameFields.get(107).setPiece(new GamePiece("Client", 2));
+		gameFields.get(108).setPiece(new GamePiece("Client", 2));
+		gameFields.get(109).setPiece(new GamePiece("Client", 2));
+		gameFields.get(110).setPiece(new GamePiece("Client", 2));
+
 	}
 
 	/**
@@ -126,7 +139,8 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 			if (gf.getPiece() == null) {
 				GamePiece temp = randomNewPiece();
 				gf.setPiece(temp);
-				output.create("c", gf.getX(), gf.getY(), temp.getOwner(), temp.getType());
+				output.create("c", gf.getX(), gf.getY(), temp.getOwner(),
+						temp.getType());
 				break;
 			}
 		}
@@ -220,9 +234,9 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 			polygon.addPoint(ex, ey);
 			polygon.addPoint(fx, fy);
 
-			g2.setColor(gf.getColor());
-			g2.fillPolygon(polygon);
-			g2.drawPolygon(polygon);
+			// g2.setColor(gf.getColor());
+			// g2.fillPolygon(polygon);
+			// g2.drawPolygon(polygon);
 
 			if (this.reachableGameFields.contains(gf)) {
 				g2.setColor(Color.GREEN);
@@ -233,16 +247,21 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 				g2.drawPolygon(polygon);
 			}
 
+			g2.drawImage(gf.getImg(), gf.getX() - gf.getImg().getWidth() / 2,
+					gf.getY() - gf.getImg().getHeight() / 2, null);
+
 		}
 
 		for (GameField gf : gameFields) {
 			if (gf.getPiece() != null) {
 
-				g2.drawImage(gf.getPiece().getImg(), gf.getX() - gf.getPiece().getImg().getWidth()/2, gf.getY() - gf.getPiece().getImg().getHeight()/2, null);
-			
-//				g2.setColor(gf.getPiece().getColor());
-//				g2.fillRect(gf.getX() - PIECESIZE / 2, gf.getY() - PIECESIZE
-//						/ 2, PIECESIZE, PIECESIZE);
+				g2.drawImage(gf.getPiece().getImg(), gf.getX()
+						- gf.getPiece().getImg().getWidth() / 2, gf.getY()
+						- gf.getPiece().getImg().getHeight() / 2, null);
+
+				// g2.setColor(gf.getPiece().getColor());
+				// g2.fillRect(gf.getX() - PIECESIZE / 2, gf.getY() - PIECESIZE
+				// / 2, PIECESIZE, PIECESIZE);
 				if (gf.getPiece().getOwner().equals(player)) {
 					g2.setColor(Color.BLUE);
 				} else {
@@ -251,11 +270,11 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 				g2.drawRect(gf.getX() - PIECESIZE / 2, gf.getY() - PIECESIZE
 						/ 2, PIECESIZE, PIECESIZE);
 			} else {
-				g2.setColor(gf.getColor());
-				g2.fillRect(gf.getX() - PIECESIZE / 2, gf.getY() - PIECESIZE
-						/ 2, PIECESIZE, PIECESIZE);
-				g2.drawRect(gf.getX() - PIECESIZE / 2, gf.getY() - PIECESIZE
-						/ 2, PIECESIZE, PIECESIZE);
+				// g2.setColor(gf.getColor());
+				// g2.fillRect(gf.getX() - PIECESIZE / 2, gf.getY() - PIECESIZE
+				// / 2, PIECESIZE, PIECESIZE);
+				// g2.drawRect(gf.getX() - PIECESIZE / 2, gf.getY() - PIECESIZE
+				// / 2, PIECESIZE, PIECESIZE);
 			}
 		}
 
@@ -302,10 +321,10 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	public Set<GameField> attackableGameFields(GameField gf, int reach) {
 
 		for (GameField tmp : gf.getNeighbors()) {
-			if (tmp.getPiece() == null) {
+			if (tmp.getPiece() == null || (tmp.getPiece() != null && tmp.getPiece().getOwner() == player)) {
 				if (reach > 0)
 					attackableGameFields(tmp, reach - 1);
-			} else if (tmp != null && tmp.getPiece() != null
+			} else if (tmp.getPiece() != null
 					&& tmp.getPiece().getOwner() != player) {
 				if (reach > 0) {
 					attackableGameFields.add(tmp);
@@ -318,7 +337,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-//		this.repaint();
+		// this.repaint();
 	}
 
 	public void mousePressed(MouseEvent event) {
