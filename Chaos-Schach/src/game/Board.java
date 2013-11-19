@@ -119,6 +119,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	 * einen neuen Spielstein
 	 */
 	public void spawn() {
+		resetStatus();
 		GameField tmp = gameFields.get(basePos);
 
 		for (GameField gf : tmp.getNeighbors()) {
@@ -467,9 +468,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 
 	public void resetStatus() {
 		for (GameField gf : gameFields) {
-			if ((gf.getPiece() != null)
-					&& (gf.getPiece().getOwner().equals(player))) {
-
+			if (gf.getPiece() != null) {
 				gf.getPiece().setStepsLeft(gf.getPiece().getSteps());
 				gf.getPiece().setAtk(true);
 			}
