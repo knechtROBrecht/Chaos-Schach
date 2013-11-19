@@ -3,7 +3,6 @@ package game;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-
 import javax.swing.*;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
@@ -13,7 +12,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 
 	private final int FIELDHEIGHT = 30;
 	private final int FIELDWIDTH = 30;
-	private final int DISTANCE = 4;
+	private final int DISTANCE = 3;
 	private final int PIECESIZE = (FIELDHEIGHT - DISTANCE);
 	private final int FIELDCOUNTX = 23;
 	private final int FIELDCOUNTY = 11;
@@ -126,10 +125,11 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 			if (gf.getPiece() == null) {
 				GamePiece temp = randomNewPiece();
 				gf.setPiece(temp);
-				output.create("c", gf.getX(), gf.getY(), player, temp.getType());
+				output.create("c", gf.getX(), gf.getY(), temp.getOwner(), temp.getType());
 				break;
 			}
 		}
+		this.repaint();
 	}
 
 	/**
@@ -237,10 +237,11 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		for (GameField gf : gameFields) {
 			if (gf.getPiece() != null) {
 
-				g2.setColor(gf.getPiece().getColor());
-				g2.fillRect(gf.getX() - PIECESIZE / 2, gf.getY() - PIECESIZE
-						/ 2, PIECESIZE, PIECESIZE);
-
+				g2.drawImage(gf.getPiece().getImg(), gf.getX() - gf.getPiece().getImg().getWidth()/2, gf.getY() - gf.getPiece().getImg().getHeight()/2, null);
+			
+//				g2.setColor(gf.getPiece().getColor());
+//				g2.fillRect(gf.getX() - PIECESIZE / 2, gf.getY() - PIECESIZE
+//						/ 2, PIECESIZE, PIECESIZE);
 				if (gf.getPiece().getOwner().equals(player)) {
 					g2.setColor(Color.BLUE);
 				} else {
@@ -316,7 +317,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		this.repaint();
+//		this.repaint();
 	}
 
 	public void mousePressed(MouseEvent event) {
@@ -332,6 +333,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 				}
 			}
 		}
+		this.repaint();
 	}
 
 	public void mouseReleased(MouseEvent event) {
@@ -365,6 +367,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 			attackableGameFields.clear();
 			reachableGameFields.clear();
 		}
+		this.repaint();
 	}
 
 	/**
@@ -387,12 +390,14 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		getGameField(xAlt, yAlt).getPiece().setAtk(false);
 		if (gameFields.get(enemyBasePos).getPiece() == null)
 			win();
+		this.repaint();
 	}
 
 	public void moveGamePiece(int xAlt, int yAlt, int xNeu, int yNeu) {
 		getGameField(xNeu, yNeu).setPiece(getGameField(xAlt, yAlt).getPiece());
 		getGameField(xAlt, yAlt).setPiece(null);
 		getGameField(xNeu, yNeu).getPiece().setStepsLeft(0);
+		this.repaint();
 	}
 
 	/**
@@ -446,6 +451,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		turn = false;
 		gameFrame.changeTurnStatus();
 		resetStatus();
+		this.repaint();
 	}
 
 	/**
@@ -500,6 +506,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	 */
 	public void create(int x, int y, String player, int type) {
 		getGameField(x, y).setPiece(new GamePiece(player, type));
+		this.repaint();
 	}
 
 }

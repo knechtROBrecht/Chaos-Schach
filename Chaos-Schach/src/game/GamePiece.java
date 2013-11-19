@@ -1,6 +1,10 @@
 package game;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class GamePiece {
 
@@ -16,6 +20,7 @@ public class GamePiece {
 	private Color color;
 	private int reach;
 	private Boolean atk = true;
+	private BufferedImage img;
 
 	/**
 	 * @param owner
@@ -26,18 +31,41 @@ public class GamePiece {
 	public GamePiece(String owner, int type) {
 		this.owner = owner;
 		this.type = type;
-		switch (type) {
-		case 0:
-			initialize(0, 1, 10, Color.black, 1, "Base");
-			break;
-		case 1:
-			initialize(2, 10, 2, Color.WHITE, 1, "Soldier");
-			break;
-		case 2:
-			initialize(3, 5, 1, Color.CYAN, 3, "Archer");
-			break;
-		default:
-			break;
+		if (owner.equals("Server")) {
+			switch (type) {
+			case 0:
+				initialize(0, 1, 10, Color.black, 1, "Base",
+						"images/CastleBlue.png");
+				break;
+			case 1:
+				initialize(2, 10, 2, Color.WHITE, 1, "Soldier",
+						"images/KnightBlue.png");
+				break;
+			case 2:
+				initialize(3, 5, 1, Color.CYAN, 3, "Archer",
+						"images/ArcherBlue.png");
+				break;
+			default:
+				break;
+			}
+		}
+		if (owner.equals("Client")) {
+			switch (type) {
+			case 0:
+				initialize(0, 1, 10, Color.black, 1, "Base",
+						"images/CastleRed.png");
+				break;
+			case 1:
+				initialize(2, 10, 2, Color.WHITE, 1, "Soldier",
+						"images/KnightRed.png");
+				break;
+			case 2:
+				initialize(3, 5, 1, Color.CYAN, 3, "Archer",
+						"images/ArcherRed.png");
+				break;
+			default:
+				break;
+			}
 		}
 	}
 
@@ -52,7 +80,7 @@ public class GamePiece {
 	 *            einen bestimmten Spielsteintypen
 	 */
 	private void initialize(int steps, int hp, int attack, Color color,
-			int reach, String name) {
+			int reach, String name, String url) {
 		this.steps = steps;
 		this.stepsLeft = steps;
 		this.hp = hp;
@@ -60,6 +88,12 @@ public class GamePiece {
 		this.color = color;
 		this.reach = reach;
 		this.name = name;
+		ClassLoader cldr = this.getClass().getClassLoader();
+		try {
+			img = ImageIO.read(cldr.getResource(url));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -212,5 +246,9 @@ public class GamePiece {
 	 */
 	public void setAtk(Boolean atk) {
 		this.atk = atk;
+	}
+
+	public BufferedImage getImg() {
+		return img;
 	}
 }
