@@ -3,6 +3,7 @@ package game;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+
 import javax.swing.*;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
@@ -13,7 +14,6 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	private final int FIELDHEIGHT = 30;
 	private final int FIELDWIDTH = 30;
 	private final int DISTANCE = 3;
-	private final int PIECESIZE = (FIELDHEIGHT - DISTANCE);
 	private final int FIELDCOUNTX = 23;
 	private final int FIELDCOUNTY = 11;
 
@@ -31,6 +31,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	private GameField clickedField;
 	private Random rand = new Random(20071969);
 	private GameFrame gameFrame;
+	private GamePiece actGamePiece;
 
 	/**
 	 * @param server
@@ -74,84 +75,6 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		setGamePieces();
 
 		time.start();
-	}
-
-	/**
-	 * @return Gibt zurueck ob man an der Reihe ist
-	 */
-	public boolean getTurn() {
-		return turn;
-	}
-
-	/**
-	 * @param turn
-	 *            Setzt ob man an der Reihe ist
-	 */
-	public void setTurn(boolean turn) {
-		this.turn = turn;
-	}
-
-	/**
-	 * Ruft die Methode im GameFrame auf welche anzeigt wer an der Reihe ist
-	 */
-	public void changeTurnStatus() {
-		gameFrame.changeTurnStatus();
-	}
-
-	/**
-	 * Setzt in das obere linke und das untere rechte Eck des Spielfeldes die
-	 * Basis Steine und bereits einen Soldaten
-	 */
-	public void setGamePieces() {
-		GamePiece base1 = new GamePiece("Client", 0);
-		gameFields.get(1).setPiece(base1);
-		GamePiece soldier1 = new GamePiece("Client", 1);
-		gameFields.get(2).setPiece(soldier1);
-
-		GamePiece base2 = new GamePiece("Server", 0);
-		gameFields.get(FIELDCOUNTX * FIELDCOUNTY - 2).setPiece(base2);
-		GamePiece soldier2 = new GamePiece("Server", 1);
-		gameFields.get(FIELDCOUNTX * FIELDCOUNTY - 3).setPiece(soldier2);
-
-		gameFields.get(100).setPiece(new GamePiece("Server", 2));
-		gameFields.get(101).setPiece(new GamePiece("Server", 2));
-		gameFields.get(102).setPiece(new GamePiece("Server", 2));
-		gameFields.get(103).setPiece(new GamePiece("Server", 2));
-		gameFields.get(104).setPiece(new GamePiece("Server", 2));
-		gameFields.get(105).setPiece(new GamePiece("Client", 2));
-		gameFields.get(106).setPiece(new GamePiece("Client", 2));
-		gameFields.get(107).setPiece(new GamePiece("Client", 2));
-		gameFields.get(108).setPiece(new GamePiece("Client", 2));
-		gameFields.get(109).setPiece(new GamePiece("Client", 2));
-		gameFields.get(110).setPiece(new GamePiece("Client", 2));
-
-	}
-
-	/**
-	 * Setzt an die erste Position neben der Basis welche er findet zufaellig
-	 * einen neuen Spielstein
-	 */
-	public void spawn() {
-		resetStatus();
-		GameField tmp = gameFields.get(basePos);
-
-		for (GameField gf : tmp.getNeighbors()) {
-			if (gf.getPiece() == null) {
-				GamePiece temp = randomNewPiece();
-				gf.setPiece(temp);
-				output.create("c", gf.getX(), gf.getY(), temp.getOwner(),
-						temp.getType());
-				break;
-			}
-		}
-		this.repaint();
-	}
-
-	/**
-	 * @return Gibt einen neuen Spielstein von einem zufaelligen Typen zurueck
-	 */
-	public GamePiece randomNewPiece() {
-		return new GamePiece(player, rand.nextInt(2) + 1);
 	}
 
 	/**
@@ -204,80 +127,73 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		}
 	}
 
-	public void paint(Graphics g) {
-		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D) g;
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		int height = FIELDHEIGHT - DISTANCE;
-		int width = FIELDWIDTH - DISTANCE;
-		for (GameField gf : gameFields) {
-			int ax = (gf.getX() + width); // rechter Punkt
-			int ay = (gf.getY());
-			int bx = (int) (gf.getX() + (width * 0.5)); // unterer rechter Punkt
-			int by = (gf.getY() + height);
-			int cx = (int) (gf.getX() - (width * 0.5)); // unterer linker Punkt
-			int cy = (gf.getY() + height);
-			int dx = (gf.getX() - width); // linker Punkt
-			int dy = (gf.getY());
-			int ex = (int) (gf.getX() - (width * 0.5)); // oberer linker Punkt
-			int ey = (gf.getY() - height);
-			int fx = (int) (gf.getX() + (width * 0.5)); // oberer rechter Punkt
-			int fy = (gf.getY() - height);
+	/**
+	 * Setzt in das obere linke und das untere rechte Eck des Spielfeldes die
+	 * Basis Steine und bereits einen Soldaten
+	 */
+	public void setGamePieces() {
+		GamePiece base1 = new GamePiece("Client", 0);
+		gameFields.get(1).setPiece(base1);
+		GamePiece soldier1 = new GamePiece("Client", 1);
+		gameFields.get(2).setPiece(soldier1);
 
-			Polygon polygon = new Polygon();
+		GamePiece base2 = new GamePiece("Server", 0);
+		gameFields.get(FIELDCOUNTX * FIELDCOUNTY - 2).setPiece(base2);
+		GamePiece soldier2 = new GamePiece("Server", 1);
+		gameFields.get(FIELDCOUNTX * FIELDCOUNTY - 3).setPiece(soldier2);
 
-			polygon.addPoint(ax, ay);
-			polygon.addPoint(bx, by);
-			polygon.addPoint(cx, cy);
-			polygon.addPoint(dx, dy);
-			polygon.addPoint(ex, ey);
-			polygon.addPoint(fx, fy);
+		gameFields.get(100).setPiece(new GamePiece("Server", 2));
+		gameFields.get(101).setPiece(new GamePiece("Server", 2));
+		gameFields.get(102).setPiece(new GamePiece("Server", 2));
+		gameFields.get(103).setPiece(new GamePiece("Server", 2));
+		gameFields.get(104).setPiece(new GamePiece("Server", 2));
+		gameFields.get(105).setPiece(new GamePiece("Client", 2));
+		gameFields.get(106).setPiece(new GamePiece("Client", 2));
+		gameFields.get(107).setPiece(new GamePiece("Client", 2));
+		gameFields.get(108).setPiece(new GamePiece("Client", 2));
+		gameFields.get(109).setPiece(new GamePiece("Client", 2));
+		gameFields.get(110).setPiece(new GamePiece("Client", 2));
 
-			// g2.setColor(gf.getColor());
-			// g2.fillPolygon(polygon);
-			// g2.drawPolygon(polygon);
+	}
 
-			if (this.reachableGameFields.contains(gf)) {
-				g2.setColor(Color.GREEN);
-				g2.drawPolygon(polygon);
-			}
-			if (this.attackableGameFields.contains(gf)) {
-				g2.setColor(Color.red);
-				g2.drawPolygon(polygon);
-			}
+	/**
+	 * Setzt an die erste Position neben der Basis welche er findet zufaellig
+	 * einen neuen Spielstein
+	 */
+	public void spawn() {
+		resetStatus();
+		GameField tmp = gameFields.get(basePos);
 
-			g2.drawImage(gf.getImg(), gf.getX() - gf.getImg().getWidth() / 2,
-					gf.getY() - gf.getImg().getHeight() / 2, null);
-
-		}
-
-		for (GameField gf : gameFields) {
-			if (gf.getPiece() != null) {
-
-				g2.drawImage(gf.getPiece().getImg(), gf.getX()
-						- gf.getPiece().getImg().getWidth() / 2, gf.getY()
-						- gf.getPiece().getImg().getHeight() / 2, null);
-
-				// g2.setColor(gf.getPiece().getColor());
-				// g2.fillRect(gf.getX() - PIECESIZE / 2, gf.getY() - PIECESIZE
-				// / 2, PIECESIZE, PIECESIZE);
-				if (gf.getPiece().getOwner().equals(player)) {
-					g2.setColor(Color.BLUE);
-				} else {
-					g2.setColor(Color.RED);
-				}
-				g2.drawRect(gf.getX() - PIECESIZE / 2, gf.getY() - PIECESIZE
-						/ 2, PIECESIZE, PIECESIZE);
-			} else {
-				// g2.setColor(gf.getColor());
-				// g2.fillRect(gf.getX() - PIECESIZE / 2, gf.getY() - PIECESIZE
-				// / 2, PIECESIZE, PIECESIZE);
-				// g2.drawRect(gf.getX() - PIECESIZE / 2, gf.getY() - PIECESIZE
-				// / 2, PIECESIZE, PIECESIZE);
+		for (GameField gf : tmp.getNeighbors()) {
+			if (gf.getPiece() == null) {
+				GamePiece temp = randomNewPiece();
+				gf.setPiece(temp);
+				output.create("c", gf.getX(), gf.getY(), temp.getOwner(),
+						temp.getType());
+				break;
 			}
 		}
+		this.repaint();
+	}
 
+	/**
+	 * @param x
+	 * @param y
+	 * @param player
+	 * @param type
+	 *            Erzeugt eine neue Spielfigur an der Stelle x,y vom Typ type
+	 *            und der Besitzer ist player
+	 */
+	public void create(int x, int y, String player, int type) {
+		getGameField(x, y).setPiece(new GamePiece(player, type));
+		this.repaint();
+	}
+
+	/**
+	 * @return Gibt einen neuen Spielstein von einem zufaelligen Typen zurueck
+	 */
+	public GamePiece randomNewPiece() {
+		return new GamePiece(player, rand.nextInt(2) + 1);
 	}
 
 	/**
@@ -293,6 +209,24 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * @param event
+	 * @return Gibt das vom Mausclick am wenigsten entfernte Spielfeld zurueck
+	 */
+	public GameField nearestField(MouseEvent event) {
+		GameField nearestGameField = gameFields.get(0);
+		for (GameField gf : gameFields) {
+			if ((Math.sqrt(Math.pow((gf.getX() - event.getX()), 2)
+					+ Math.pow((gf.getY() - event.getY()), 2))) < (Math
+					.sqrt(Math.pow((nearestGameField.getX() - event.getX()), 2)
+							+ Math.pow(
+									(nearestGameField.getY() - event.getY()), 2)))) {
+				nearestGameField = gf;
+			}
+		}
+		return nearestGameField;
 	}
 
 	/**
@@ -321,7 +255,8 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	public Set<GameField> attackableGameFields(GameField gf, int reach) {
 
 		for (GameField tmp : gf.getNeighbors()) {
-			if (tmp.getPiece() == null || (tmp.getPiece() != null && tmp.getPiece().getOwner() == player)) {
+			if (tmp.getPiece() == null
+					|| (tmp.getPiece() != null && tmp.getPiece().getOwner() == player)) {
 				if (reach > 0)
 					attackableGameFields(tmp, reach - 1);
 			} else if (tmp.getPiece() != null
@@ -333,61 +268,6 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 			}
 		}
 		return attackableGameFields;
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// this.repaint();
-	}
-
-	public void mousePressed(MouseEvent event) {
-		if (turn) {
-			clickedField = nearestField(event);
-			if (clickedField.getPiece() != null
-					&& clickedField.getPiece().getOwner().equals(player)) {
-				reachableGameFields = reachableGameFields(clickedField,
-						clickedField.getPiece().getStepsLeft());
-				if (clickedField.getPiece().getAtk()) {
-					attackableGameFields = attackableGameFields(clickedField,
-							clickedField.getPiece().getReach());
-				}
-			}
-		}
-		this.repaint();
-	}
-
-	public void mouseReleased(MouseEvent event) {
-		if (turn) {
-			GameField releasedField = nearestField(event);
-			if (!(clickedField.equals(releasedField))
-					&& releasedField.getPiece() == null
-					&& clickedField.getPiece() != null) {
-
-				for (GameField gf : reachableGameFields) {
-					if (gf == releasedField) {
-						output.move(clickedField.getX(), clickedField.getY(),
-								releasedField.getX(), releasedField.getY());
-						moveGamePiece(clickedField.getX(), clickedField.getY(),
-								releasedField.getX(), releasedField.getY());
-						gf.getPiece().setStepsLeft(0);
-					}
-				}
-			} else if (!(clickedField.equals(releasedField))
-					&& releasedField.getPiece() != null
-					&& clickedField.getPiece() != null) {
-				for (GameField gf : attackableGameFields) {
-					if (gf == releasedField) {
-						output.attack(clickedField.getX(), clickedField.getY(),
-								releasedField.getX(), releasedField.getY());
-						attack(clickedField.getX(), clickedField.getY(),
-								releasedField.getX(), releasedField.getY());
-					}
-				}
-			}
-			attackableGameFields.clear();
-			reachableGameFields.clear();
-		}
-		this.repaint();
 	}
 
 	/**
@@ -418,41 +298,6 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		getGameField(xAlt, yAlt).setPiece(null);
 		getGameField(xNeu, yNeu).getPiece().setStepsLeft(0);
 		this.repaint();
-	}
-
-	/**
-	 * @param event
-	 * @return Gibt das vom Mausclick am wenigsten entfernte Spielfeld zurueck
-	 */
-	public GameField nearestField(MouseEvent event) {
-		GameField nearestGameField = gameFields.get(0);
-		for (GameField gf : gameFields) {
-			if ((Math.sqrt(Math.pow((gf.getX() - event.getX()), 2)
-					+ Math.pow((gf.getY() - event.getY()), 2))) < (Math
-					.sqrt(Math.pow((nearestGameField.getX() - event.getX()), 2)
-							+ Math.pow(
-									(nearestGameField.getY() - event.getY()), 2)))) {
-				nearestGameField = gf;
-			}
-		}
-		return nearestGameField;
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent event) {
-		GameField ngf = nearestField(event);
-		if (ngf.getPiece() != null) {
-			gameFrame.setTextArea(ngf.getPiece().toString(), ngf.getPiece()
-					.getOwner().equals(player));
-		}
-	}
-
-	/**
-	 * @param gameFrame
-	 *            Fuegt GameFrame zum Board hinzu
-	 */
-	public void addGameFrame(GameFrame gameFrame) {
-		this.gameFrame = gameFrame;
 	}
 
 	/**
@@ -494,8 +339,121 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		}
 	}
 
+	/**
+	 * Ruft die Methode im GameFrame auf welche anzeigt wer an der Reihe ist
+	 */
+	public void changeTurnStatus() {
+		gameFrame.changeTurnStatus();
+	}
+
+	/**
+	 * @return Gibt zurueck ob man an der Reihe ist
+	 */
+	public boolean getTurn() {
+		return turn;
+	}
+
+	/**
+	 * @param turn
+	 *            Setzt ob man an der Reihe ist
+	 */
+	public void setTurn(boolean turn) {
+		this.turn = turn;
+	}
+
+	/**
+	 * @param gameFrame
+	 *            Fuegt GameFrame zum Board hinzu
+	 */
+	public void addGameFrame(GameFrame gameFrame) {
+		this.gameFrame = gameFrame;
+	}
+
 	@Override
-	public void mouseClicked(MouseEvent arg0) {
+	public void mouseMoved(MouseEvent event) {
+		GameField ngf = nearestField(event);
+		if (ngf.getPiece() != null) {
+			gameFrame.setTextArea(ngf.getPiece().toString(), ngf.getPiece()
+					.getOwner().equals(player));
+		}
+		if (ngf.getPiece() != null) {
+			if (ngf.getPiece().getOwner() != player) {
+				setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+			} else if (attackableGameFields.contains(ngf)) {
+				setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+			}
+		} else {
+			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent event) {
+		if (turn) {
+			if (actGamePiece == null) {
+				System.out.println("firstclick");
+				firstclick(event);
+				this.repaint();
+			} else {
+				System.out.println("secondclick");
+				secondclick(event);
+				clickedField = null;
+				actGamePiece = null;
+				this.repaint();
+			}
+		}
+
+	}
+
+	private void firstclick(MouseEvent event) {
+		clickedField = nearestField(event);
+		if (clickedField.getPiece() != null
+				&& clickedField.getPiece().getOwner().equals(player)) {
+			reachableGameFields = reachableGameFields(clickedField,
+					clickedField.getPiece().getStepsLeft());
+			if (clickedField.getPiece().getAtk()) {
+				attackableGameFields = attackableGameFields(clickedField,
+						clickedField.getPiece().getReach());
+			}
+			actGamePiece = clickedField.getPiece();
+		}
+
+	}
+
+	private void secondclick(MouseEvent event) {
+		GameField releasedField = nearestField(event);
+		if (!(clickedField.equals(releasedField))
+				&& releasedField.getPiece() == null
+				&& clickedField.getPiece() != null) {
+
+			for (GameField gf : reachableGameFields) {
+				if (gf == releasedField) {
+					output.move(clickedField.getX(), clickedField.getY(),
+							releasedField.getX(), releasedField.getY());
+					moveGamePiece(clickedField.getX(), clickedField.getY(),
+							releasedField.getX(), releasedField.getY());
+					gf.getPiece().setStepsLeft(0);
+				}
+			}
+		} else if (!(clickedField.equals(releasedField))
+				&& releasedField.getPiece() != null
+				&& clickedField.getPiece() != null) {
+			for (GameField gf : attackableGameFields) {
+				if (gf == releasedField) {
+					output.attack(clickedField.getX(), clickedField.getY(),
+							releasedField.getX(), releasedField.getY());
+					attack(clickedField.getX(), clickedField.getY(),
+							releasedField.getX(), releasedField.getY());
+				}
+			}
+
+		}
+		attackableGameFields.clear();
+		reachableGameFields.clear();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
 
 	}
 
@@ -514,17 +472,70 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 
 	}
 
-	/**
-	 * @param x
-	 * @param y
-	 * @param player
-	 * @param type
-	 *            Erzeugt eine neue Spielfigur an der Stelle x,y vom Typ type
-	 *            und der Besitzer ist player
-	 */
-	public void create(int x, int y, String player, int type) {
-		getGameField(x, y).setPiece(new GamePiece(player, type));
-		this.repaint();
+	@Override
+	public void mousePressed(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+
+	}
+
+	public void paint(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		int height = FIELDHEIGHT - DISTANCE + 1;
+		int width = FIELDWIDTH - DISTANCE + 1;
+		for (GameField gf : gameFields) {
+			int ax = (gf.getX() + width); // rechter Punkt
+			int ay = (gf.getY());
+			int bx = (int) (gf.getX() + (width * 0.5)); // unterer rechter Punkt
+			int by = (gf.getY() + height);
+			int cx = (int) (gf.getX() - (width * 0.5)); // unterer linker Punkt
+			int cy = (gf.getY() + height);
+			int dx = (gf.getX() - width); // linker Punkt
+			int dy = (gf.getY());
+			int ex = (int) (gf.getX() - (width * 0.5)); // oberer linker Punkt
+			int ey = (gf.getY() - height);
+			int fx = (int) (gf.getX() + (width * 0.5)); // oberer rechter Punkt
+			int fy = (gf.getY() - height);
+
+			Polygon polygon = new Polygon();
+
+			polygon.addPoint(ax, ay);
+			polygon.addPoint(bx, by);
+			polygon.addPoint(cx, cy);
+			polygon.addPoint(dx, dy);
+			polygon.addPoint(ex, ey);
+			polygon.addPoint(fx, fy);
+
+			if (this.reachableGameFields.contains(gf)) {
+				g2.setColor(Color.magenta);
+				g2.fillPolygon(polygon);
+				g2.drawPolygon(polygon);
+			}
+			if (this.attackableGameFields.contains(gf)) {
+				g2.setColor(Color.red);
+				g2.fillPolygon(polygon);
+				g2.drawPolygon(polygon);
+			}
+
+			g2.drawImage(gf.getImg(), gf.getX() - gf.getImg().getWidth() / 2,
+					gf.getY() - gf.getImg().getHeight() / 2, null);
+
+		}
+
+		for (GameField gf : gameFields) {
+			if (gf.getPiece() != null) {
+
+				g2.drawImage(gf.getPiece().getImg(), gf.getX()
+						- gf.getPiece().getImg().getWidth() / 2, gf.getY()
+						- gf.getPiece().getImg().getHeight() / 2, null);
+			}
+		}
 	}
 
 }

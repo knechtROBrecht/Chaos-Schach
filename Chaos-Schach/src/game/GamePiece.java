@@ -38,11 +38,11 @@ public class GamePiece {
 						"images/CastleBlue.png");
 				break;
 			case 1:
-				initialize(2, 10, 2, Color.WHITE, 1, "Soldier",
+				initialize(4, 10, 2, Color.WHITE, 1, "Soldier",
 						"images/KnightBlue.png");
 				break;
 			case 2:
-				initialize(3, 5, 1, Color.CYAN, 3, "Archer",
+				initialize(5, 5, 1, Color.CYAN, 3, "Archer",
 						"images/ArcherBlue.png");
 				break;
 			default:
@@ -56,11 +56,11 @@ public class GamePiece {
 						"images/CastleRed.png");
 				break;
 			case 1:
-				initialize(2, 10, 2, Color.WHITE, 1, "Soldier",
+				initialize(4, 10, 2, Color.WHITE, 1, "Soldier",
 						"images/KnightRed.png");
 				break;
 			case 2:
-				initialize(3, 5, 1, Color.CYAN, 3, "Archer",
+				initialize(5, 5, 1, Color.CYAN, 3, "Archer",
 						"images/ArcherRed.png");
 				break;
 			default:

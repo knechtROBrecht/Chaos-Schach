@@ -31,11 +31,11 @@ public class GameField {
 		this.y = y;
 		this.type = type;
 		if (type == 0) {
-			initialize(Color.yellow, 1, "Plane", "images/test.png");
+			initialize(Color.yellow, 1, "Path", "images/Path.png");
 		} else if (type == 1) {
-			initialize(Color.darkGray, 2, "Swamp", "images/test.png");
+			initialize(Color.darkGray, 2, "Grass", "images/Grass.png");
 		} else if (type == 2) {
-			initialize(Color.white, 1, "Ice", "images/test.png");
+			initialize(Color.white, 3, "Forest", "images/Forest.png");
 			// FIXME difficulty 0 funktioniert nicht.
 		}
 
