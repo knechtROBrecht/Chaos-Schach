@@ -14,9 +14,8 @@ public class Client {
 	private Socket socket;
 	private DataOutputStream dout;
 	private DataInputStream din;
-
-	// private String ip;
-	// private String name;
+	private String ip;
+	private int port;
 
 	/**
 	 * @param frame
@@ -24,9 +23,10 @@ public class Client {
 	 *            Board dem Frame hinzufuegt.
 	 */
 	Client(GameFrame frame) {
-		// ip = JOptionPane.showInputDialog("Geben sie die ip ein:");
+		ip = JOptionPane.showInputDialog("Geben sie die ip ein:");
+		port = Integer.parseInt(JOptionPane.showInputDialog("Geben sie den port ein:"));
 		try {
-			socket = new Socket("127.0.0.1", 7777);
+			socket = new Socket(ip, port);
 			dout = new DataOutputStream(socket.getOutputStream());
 			din = new DataInputStream(socket.getInputStream());
 			frame.addBoard(new Board(this));
@@ -35,10 +35,8 @@ public class Client {
 					"Keinen möglichen Server gefunden", "Verbindungsfehler",
 					JOptionPane.WARNING_MESSAGE);
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

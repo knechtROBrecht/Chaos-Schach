@@ -2,8 +2,11 @@ package game;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
@@ -16,6 +19,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	private final int DISTANCE = 3;
 	private final int FIELDCOUNTX = 23;
 	private final int FIELDCOUNTY = 11;
+	private final Point hotSpot = new Point(0, 0);
 
 	private int basePos;
 	private int enemyBasePos;
@@ -23,6 +27,14 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	private Input input;
 	private Output output;
 	private boolean turn;
+	private BufferedImage handImg;
+	private BufferedImage swordImg;
+	private BufferedImage feetImg;
+	private BufferedImage noImg;
+	private Cursor handCur;
+	private Cursor swordCur;
+	private Cursor feetCur;
+	private Cursor noCur;
 
 	private ArrayList<GameField> gameFields = new ArrayList<GameField>();
 	private Set<GameField> reachableGameFields = new HashSet<GameField>();
@@ -73,8 +85,24 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		this.requestFocus();
 		setGameFields();
 		setGamePieces();
-
 		time.start();
+		defCursor();
+	}
+	
+	private void defCursor(){
+		ClassLoader cldr = this.getClass().getClassLoader();
+		try {
+			handImg = ImageIO.read(cldr.getResource("images/HandCursor.png"));
+			swordImg = ImageIO.read(cldr.getResource("images/Sword.png"));
+			feetImg = ImageIO.read(cldr.getResource("images/Feet.png"));
+			noImg = ImageIO.read(cldr.getResource("images/NoCur.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		handCur = Toolkit.getDefaultToolkit().createCustomCursor(handImg, hotSpot, "handCur");
+		swordCur = Toolkit.getDefaultToolkit().createCustomCursor(swordImg, hotSpot, "swordCur");
+		feetCur = Toolkit.getDefaultToolkit().createCustomCursor(feetImg, hotSpot, "feetCur");
+		noCur = Toolkit.getDefaultToolkit().createCustomCursor(noImg, hotSpot, "noCur");
 	}
 
 	/**
@@ -376,14 +404,18 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 			gameFrame.setTextArea(ngf.getPiece().toString(), ngf.getPiece()
 					.getOwner().equals(player));
 		}
-		if (ngf.getPiece() != null) {
+		if(reachableGameFields.contains(ngf)){
+			setCursor(feetCur);
+		}else if(attackableGameFields.contains(ngf)){
+			setCursor(swordCur);
+		}else if (ngf.getPiece() != null) {
 			if (ngf.getPiece().getOwner() != player) {
-				setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
-			} else if (attackableGameFields.contains(ngf)) {
-				setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+				setCursor(noCur);
+			}else{
+				setCursor(handCur);
 			}
 		} else {
-			setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			setCursor(handCur);
 		}
 	}
 
@@ -454,7 +486,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-
+		this.repaint();
 	}
 
 	@Override

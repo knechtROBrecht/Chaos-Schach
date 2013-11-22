@@ -6,6 +6,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
+import javax.swing.JOptionPane;
+
 public class Server {
 
 	private ServerSocket serverSocket;
@@ -13,6 +15,7 @@ public class Server {
 	private DataOutputStream dout;
 	private DataInputStream din;
 	private GameFrame frame;
+	private int port;
 
 	/**
 	 * @param frame
@@ -21,7 +24,8 @@ public class Server {
 	 *             Board dem Frame hinzufuegt.
 	 */
 	Server(GameFrame frame) throws Exception {
-		serverSocket = new ServerSocket(7777);
+		port = Integer.parseInt(JOptionPane.showInputDialog("Geben sie den port ein:"));
+		serverSocket = new ServerSocket(port);
 		this.frame = frame;
 		try {
 			socket = serverSocket.accept();
