@@ -117,7 +117,22 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		int flag = 0;
 		for (int j = 0; j < FIELDCOUNTX; j++) {
 			for (int i = 0; i < FIELDCOUNTY; i++) {
-				gameFields.add(new GameField(mx, my, rand.nextInt(3)));
+				int chance = rand.nextInt(100);
+				int fieldtype = 0;
+				if(chance>=1 && chance < 34){
+					fieldtype=0;
+				}
+				else if(chance>=34 && chance < 67){
+					fieldtype=1;
+				}
+				else if(chance>=67 && chance < 97){
+					fieldtype=2;
+				}
+				else if(chance>=97 && chance <= 100){
+					fieldtype=3;
+				}
+				
+				gameFields.add(new GameField(mx, my, fieldtype));
 
 				my += height * 2;
 			}

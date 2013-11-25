@@ -36,7 +36,8 @@ public class GameField {
 			initialize(Color.darkGray, 2, "Grass", "images/Grass.png");
 		} else if (type == 2) {
 			initialize(Color.white, 3, "Forest", "images/Forest.png");
-			// FIXME difficulty 0 funktioniert nicht.
+		} else if (type == 3) {
+			initialize(Color.white, 999, "Mountain", "images/NoCur.png");
 		}
 
 	}
