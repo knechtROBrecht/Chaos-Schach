@@ -1,9 +1,7 @@
 package game;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 
 public class GamePiece {
@@ -17,7 +15,6 @@ public class GamePiece {
 	private int stepsLeft;
 	private int hp;
 	private int attack;
-	private Color color;
 	private int reach;
 	private Boolean atk = true;
 	private BufferedImage img;
@@ -28,39 +25,39 @@ public class GamePiece {
 	 *            Konstruktor ruft die Hilfsmethode initialize mit den jeweils
 	 *            fuer den Spielsteintypen benoetigten Parametern auf
 	 */
-	public GamePiece(String owner, int type) {
+	public GamePiece(String owner, int type, boolean owned) {
 		this.owner = owner;
 		this.type = type;
-		if (owner.equals("Server")) {
+		if (owned) {
 			switch (type) {
 			case 0:
-				initialize(0, 1, 10, Color.black, 1, "Base",
+				initialize(0, 1, 10, 1, "Base",
 						"images/CastleBlue.png");
 				break;
 			case 1:
-				initialize(4, 10, 2, Color.WHITE, 1, "Soldier",
+				initialize(4, 10, 2, 1, "Soldier",
 						"images/KnightBlue.png");
 				break;
 			case 2:
-				initialize(5, 5, 1, Color.CYAN, 3, "Archer",
+				initialize(5, 5, 1, 3, "Archer",
 						"images/ArcherBlue.png");
 				break;
 			default:
 				break;
 			}
 		}
-		if (owner.equals("Client")) {
+		if (!owned) {
 			switch (type) {
 			case 0:
-				initialize(0, 1, 10, Color.black, 1, "Base",
+				initialize(0, 1, 10, 1, "Base",
 						"images/CastleRed.png");
 				break;
 			case 1:
-				initialize(4, 10, 2, Color.WHITE, 1, "Soldier",
+				initialize(4, 10, 2, 1, "Soldier",
 						"images/KnightRed.png");
 				break;
 			case 2:
-				initialize(5, 5, 1, Color.CYAN, 3, "Archer",
+				initialize(5, 5, 1, 3, "Archer",
 						"images/ArcherRed.png");
 				break;
 			default:
@@ -79,13 +76,12 @@ public class GamePiece {
 	 *            Wird vom Konstruktor aufgerufen und setzt die Paramter fuer
 	 *            einen bestimmten Spielsteintypen
 	 */
-	private void initialize(int steps, int hp, int attack, Color color,
+	private void initialize(int steps, int hp, int attack,
 			int reach, String name, String url) {
 		this.steps = steps;
 		this.stepsLeft = steps;
 		this.hp = hp;
 		this.attack = attack;
-		this.color = color;
 		this.reach = reach;
 		this.name = name;
 		ClassLoader cldr = this.getClass().getClassLoader();
@@ -162,21 +158,6 @@ public class GamePiece {
 	 */
 	public void setType(int type2) {
 		this.type = type2;
-	}
-
-	/**
-	 * @return Gibt die Farbe der Spielfigur zurueck
-	 */
-	public Color getColor() {
-		return color;
-	}
-
-	/**
-	 * @param color
-	 *            Setzt die Farbe der Spielfigur
-	 */
-	public void setColor(Color color) {
-		this.color = color;
 	}
 
 	public String toString() {

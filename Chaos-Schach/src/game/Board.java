@@ -27,18 +27,12 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	private Input input;
 	private Output output;
 	private boolean turn;
-	private BufferedImage handImg;
-	private BufferedImage swordImg;
-	private BufferedImage feetImg;
-	private BufferedImage noImg;
-	private Cursor handCur;
-	private Cursor swordCur;
-	private Cursor feetCur;
-	private Cursor noCur;
+	private BufferedImage handImg, swordImg, feetImg, noImg;
+	private Cursor handCur, swordCur, feetCur, noCur;
 
 	private ArrayList<GameField> gameFields = new ArrayList<GameField>();
-	private Set<GameField> reachableGameFields = new HashSet<GameField>();
-	private Set<GameField> attackableGameFields = new HashSet<GameField>();
+	private Set<GameField> reachableGameFields = new HashSet<GameField>(),
+			attackableGameFields = new HashSet<GameField>();
 	private Timer time = new Timer(30, this);
 	private GameField clickedField;
 	private Random rand = new Random(20071969);
@@ -88,8 +82,8 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		time.start();
 		defCursor();
 	}
-	
-	private void defCursor(){
+
+	private void defCursor() {
 		ClassLoader cldr = this.getClass().getClassLoader();
 		try {
 			handImg = ImageIO.read(cldr.getResource("images/HandCursor.png"));
@@ -99,10 +93,14 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		handCur = Toolkit.getDefaultToolkit().createCustomCursor(handImg, hotSpot, "handCur");
-		swordCur = Toolkit.getDefaultToolkit().createCustomCursor(swordImg, hotSpot, "swordCur");
-		feetCur = Toolkit.getDefaultToolkit().createCustomCursor(feetImg, hotSpot, "feetCur");
-		noCur = Toolkit.getDefaultToolkit().createCustomCursor(noImg, hotSpot, "noCur");
+		handCur = Toolkit.getDefaultToolkit().createCustomCursor(handImg,
+				hotSpot, "handCur");
+		swordCur = Toolkit.getDefaultToolkit().createCustomCursor(swordImg,
+				hotSpot, "swordCur");
+		feetCur = Toolkit.getDefaultToolkit().createCustomCursor(feetImg,
+				hotSpot, "feetCur");
+		noCur = Toolkit.getDefaultToolkit().createCustomCursor(noImg, hotSpot,
+				"noCur");
 	}
 
 	/**
@@ -119,21 +117,16 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 			for (int i = 0; i < FIELDCOUNTY; i++) {
 				int chance = rand.nextInt(100);
 				int fieldtype = 0;
-				if(chance>=1 && chance < 34){
-					fieldtype=0;
+				if (chance >= 1 && chance < 34) {
+					fieldtype = 0;
+				} else if (chance >= 34 && chance < 67) {
+					fieldtype = 1;
+				} else if (chance >= 67 && chance < 97) {
+					fieldtype = 2;
+				} else if (chance >= 97 && chance <= 100) {
+					fieldtype = 3;
 				}
-				else if(chance>=34 && chance < 67){
-					fieldtype=1;
-				}
-				else if(chance>=67 && chance < 97){
-					fieldtype=2;
-				}
-				else if(chance>=97 && chance <= 100){
-					fieldtype=3;
-				}
-				
 				gameFields.add(new GameField(mx, my, fieldtype));
-
 				my += height * 2;
 			}
 			if (flag == 0) {
@@ -175,27 +168,27 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	 * Basis Steine und bereits einen Soldaten
 	 */
 	public void setGamePieces() {
-		GamePiece base1 = new GamePiece("Client", 0);
+		GamePiece base1 = new GamePiece("Client", 0, "Client" == player);
 		gameFields.get(1).setPiece(base1);
-		GamePiece soldier1 = new GamePiece("Client", 1);
+		GamePiece soldier1 = new GamePiece("Client", 1, "Client" == player);
 		gameFields.get(2).setPiece(soldier1);
 
-		GamePiece base2 = new GamePiece("Server", 0);
+		GamePiece base2 = new GamePiece("Server", 0, "Server" == player);
 		gameFields.get(FIELDCOUNTX * FIELDCOUNTY - 2).setPiece(base2);
-		GamePiece soldier2 = new GamePiece("Server", 1);
+		GamePiece soldier2 = new GamePiece("Server", 1, "Server" == player);
 		gameFields.get(FIELDCOUNTX * FIELDCOUNTY - 3).setPiece(soldier2);
 
-		gameFields.get(100).setPiece(new GamePiece("Server", 2));
-		gameFields.get(101).setPiece(new GamePiece("Server", 2));
-		gameFields.get(102).setPiece(new GamePiece("Server", 2));
-		gameFields.get(103).setPiece(new GamePiece("Server", 2));
-		gameFields.get(104).setPiece(new GamePiece("Server", 2));
-		gameFields.get(105).setPiece(new GamePiece("Client", 2));
-		gameFields.get(106).setPiece(new GamePiece("Client", 2));
-		gameFields.get(107).setPiece(new GamePiece("Client", 2));
-		gameFields.get(108).setPiece(new GamePiece("Client", 2));
-		gameFields.get(109).setPiece(new GamePiece("Client", 2));
-		gameFields.get(110).setPiece(new GamePiece("Client", 2));
+		gameFields.get(100).setPiece(new GamePiece("Server", 2, "Server" == player));
+		gameFields.get(101).setPiece(new GamePiece("Server", 2, "Server" == player));
+		gameFields.get(102).setPiece(new GamePiece("Server", 2, "Server" == player));
+		gameFields.get(103).setPiece(new GamePiece("Server", 2, "Server" == player));
+		gameFields.get(104).setPiece(new GamePiece("Server", 2, "Server" == player));
+		gameFields.get(105).setPiece(new GamePiece("Client", 2, "Client" == player));
+		gameFields.get(106).setPiece(new GamePiece("Client", 2, "Client" == player));
+		gameFields.get(107).setPiece(new GamePiece("Client", 2, "Client" == player));
+		gameFields.get(108).setPiece(new GamePiece("Client", 2, "Client" == player));
+		gameFields.get(109).setPiece(new GamePiece("Client", 2, "Client" == player));
+		gameFields.get(110).setPiece(new GamePiece("Client", 2, "Client" == player));
 
 	}
 
@@ -228,7 +221,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	 *            und der Besitzer ist player
 	 */
 	public void create(int x, int y, String player, int type) {
-		getGameField(x, y).setPiece(new GamePiece(player, type));
+		getGameField(x, y).setPiece(new GamePiece(player, type, player==this.player));
 		this.repaint();
 	}
 
@@ -236,7 +229,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	 * @return Gibt einen neuen Spielstein von einem zufaelligen Typen zurueck
 	 */
 	public GamePiece randomNewPiece() {
-		return new GamePiece(player, rand.nextInt(2) + 1);
+		return new GamePiece(player, rand.nextInt(2) + 1, true);
 	}
 
 	/**
@@ -419,14 +412,14 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 			gameFrame.setTextArea(ngf.getPiece().toString(), ngf.getPiece()
 					.getOwner().equals(player));
 		}
-		if(reachableGameFields.contains(ngf)){
+		if (reachableGameFields.contains(ngf)) {
 			setCursor(feetCur);
-		}else if(attackableGameFields.contains(ngf)){
+		} else if (attackableGameFields.contains(ngf)) {
 			setCursor(swordCur);
-		}else if (ngf.getPiece() != null) {
+		} else if (ngf.getPiece() != null) {
 			if (ngf.getPiece().getOwner() != player) {
 				setCursor(noCur);
-			}else{
+			} else {
 				setCursor(handCur);
 			}
 		} else {

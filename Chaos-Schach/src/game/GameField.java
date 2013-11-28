@@ -101,7 +101,7 @@ public class GameField {
 
 	/**
 	 * @param gf
-	 * 			fügt ein Nachbarfeld hinzu
+	 *            fügt ein Nachbarfeld hinzu
 	 */
 	public void addNeighbor(GameField gf) {
 		neighbors.add(gf);
@@ -178,8 +178,8 @@ public class GameField {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public BufferedImage getImg(){
+
+	public BufferedImage getImg() {
 		return img;
 	}
 
