@@ -31,16 +31,14 @@ public class Mainmenu extends JFrame {
 		host.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				Thread trd = new Thread(new GameFrame("s"));
-				trd.start();
+				new GameFrame("s");
 			}
 		});
 
 		conn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				Thread trd = new Thread(new GameFrame("c"));
-				trd.start();
+				new GameFrame("c");
 			}
 		});
 

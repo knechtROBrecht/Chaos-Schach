@@ -24,8 +24,9 @@ public class Client {
 	 */
 	Client(GameFrame frame) {
 		ip = JOptionPane.showInputDialog("Geben sie die ip ein:");
-		port = Integer.parseInt(JOptionPane.showInputDialog("Geben sie den port ein:"));
+		String str = JOptionPane.showInputDialog("Geben sie den port ein:");
 		try {
+			port = Integer.parseInt(str);
 			socket = new Socket(ip, port);
 			dout = new DataOutputStream(socket.getOutputStream());
 			din = new DataInputStream(socket.getInputStream());
@@ -34,10 +35,19 @@ public class Client {
 			JOptionPane.showMessageDialog(null,
 					"Keinen möglichen Server gefunden", "Verbindungsfehler",
 					JOptionPane.WARNING_MESSAGE);
+			System.exit(0);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null,
+					"Ungueltige Eingabe!\nConnect zum Spiel abgebrochen!",
+					"Verbindungsfehler", JOptionPane.WARNING_MESSAGE);
+			System.exit(0);
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null,
+					"Ungueltige Eingabe!\nConnect zum Spiel abgebrochen!",
+					"Verbindungsfehler", JOptionPane.WARNING_MESSAGE);
+			System.exit(0);
 		}
 
 	}

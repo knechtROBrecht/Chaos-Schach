@@ -1,14 +1,19 @@
 package game;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.URL;
 
 import javax.swing.JOptionPane;
 
-public class Server {
+public class Server implements Runnable {
 
 	private ServerSocket serverSocket;
 	private Socket socket;
@@ -23,20 +28,8 @@ public class Server {
 	 *             Konstruktor, der In- und Output Streams initializiert und das
 	 *             Board dem Frame hinzufuegt.
 	 */
-	Server(GameFrame frame) throws Exception {
-		port = Integer.parseInt(JOptionPane.showInputDialog("Geben sie den port ein:"));
-		serverSocket = new ServerSocket(port);
+	Server(GameFrame frame) {
 		this.frame = frame;
-		try {
-			socket = serverSocket.accept();
-			System.out.println("Connection from: " + socket.getInetAddress()
-					+ "\n");
-			dout = new DataOutputStream(socket.getOutputStream());
-			din = new DataInputStream(socket.getInputStream());
-			this.frame.addBoard(new Board(this));
-		} catch (SocketException e) {
-			e.printStackTrace();
-		}
 	}
 
 	/**
@@ -51,6 +44,38 @@ public class Server {
 	 */
 	public DataInputStream getDis() {
 		return din;
+	}
+
+	@Override
+	public void run() {
+		try {
+			URL whatismyip = new URL("http://checkip.amazonaws.com");
+			BufferedReader in = new BufferedReader(new InputStreamReader(
+					whatismyip.openStream()));
+			String ip = in.readLine();
+			String str = JOptionPane.showInputDialog("Ihre IP = " + ip
+					+ "\nGeben sie den port ein:", "7777");
+			port = Integer.parseInt(str);
+			serverSocket = new ServerSocket(port);
+			socket = serverSocket.accept();
+			System.out.println("Connection from: " + socket.getInetAddress()
+					+ "\n");
+			dout = new DataOutputStream(socket.getOutputStream());
+			din = new DataInputStream(socket.getInputStream());
+			this.frame.addBoard(new Board(this));
+			frame.changeTurnStatus();
+		} catch (SocketException e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null,
+					"Ungueltiger Port!\nHosten vom Spiel abgebrochen!",
+					"Abbruch", JOptionPane.WARNING_MESSAGE);
+			System.exit(0);
+		}
 	}
 
 }

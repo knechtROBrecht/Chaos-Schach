@@ -16,41 +16,17 @@ import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
 @SuppressWarnings("serial")
-public class GameFrame extends JFrame implements Runnable {
+public class GameFrame extends JFrame{
 
 	private JButton aufgeben;
 	private JButton turn;
 	private JPanel westPanel;
 	private JLabel conn;
-	private String opt;
 	private Board board;
 	private JTextArea textArea;
 	private JLabel yourTurn;
 
 	GameFrame(String opt) {
-		this.opt = opt;
-	}
-
-	/**
-	 * @param board
-	 *            Fuegt dem GameFrame das Board hinzu und dem Board das
-	 *            GameFrame
-	 */
-	public void addBoard(Board board) {
-		this.board = board;
-		this.remove(conn);
-		this.add(this.board, BorderLayout.CENTER);
-		this.setVisible(true);
-		this.board.addGameFrame(this);
-		this.board.setBorder(BorderFactory.createLineBorder(Color.black));
-	}
-
-	/**
-	 * Laeuft bis der Thread interrupted wird und ist fuer das Erzeugen des
-	 * gesamten Spielemenues zustaendig (Turn Button, Surrender Button etc.)
-	 */
-	@Override
-	public void run() {
 		this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		this.setSize(1280, 720);
 		this.setBackground(Color.DARK_GRAY);
@@ -100,14 +76,12 @@ public class GameFrame extends JFrame implements Runnable {
 		this.add(westPanel, BorderLayout.WEST);
 		conn = new JLabel("waiting for connection");
 		this.add(conn, BorderLayout.CENTER);
-
 		this.setVisible(true);
-
 		try {
 			if (opt.equals("s")) {
 				this.setTitle("Server");
-				new Server(this);
-				changeTurnStatus();
+				Thread trd = new Thread(new Server(this));
+				trd.start();
 			} else if (opt.equals("c")) {
 				this.setTitle("Client");
 				new Client(this);
@@ -116,8 +90,27 @@ public class GameFrame extends JFrame implements Runnable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
+
+	/**
+	 * @param board
+	 *            Fuegt dem GameFrame das Board hinzu und dem Board das
+	 *            GameFrame
+	 */
+	public void addBoard(Board board) {
+		this.board = board;
+		this.remove(conn);
+		this.add(this.board, BorderLayout.CENTER);
+		this.setVisible(true);
+		this.board.addGameFrame(this);
+		this.board.setBorder(BorderFactory.createLineBorder(Color.black));
+	}
+
+	/**
+	 * Laeuft bis der Thread interrupted wird und ist fuer das Erzeugen des
+	 * gesamten Spielemenues zustaendig (Turn Button, Surrender Button etc.)
+	 */
+	
 
 	/**
 	 * @param str
