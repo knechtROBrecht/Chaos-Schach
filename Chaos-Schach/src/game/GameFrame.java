@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -34,6 +33,21 @@ public class GameFrame extends JFrame{
 		this.setResizable(false);
 
 		westPanel = new JPanel();
+//		westPanel.addMouseMotionListener(new MouseMotionListener(){
+//
+//			@Override
+//			public void mouseDragged(MouseEvent arg0) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//
+//			@Override
+//			public void mouseMoved(MouseEvent arg0) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//		});
 		westPanel.setLayout(new BorderLayout());
 		westPanel.setPreferredSize(new Dimension(200, 720));
 		aufgeben = new JButton("Aufgeben");
@@ -104,6 +118,7 @@ public class GameFrame extends JFrame{
 		this.setVisible(true);
 		this.board.addGameFrame(this);
 		this.board.setBorder(BorderFactory.createLineBorder(Color.black));
+		setCursor(board.getHandCur());
 	}
 
 	/**

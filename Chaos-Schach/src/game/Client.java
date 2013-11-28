@@ -23,8 +23,8 @@ public class Client {
 	 *            Board dem Frame hinzufuegt.
 	 */
 	Client(GameFrame frame) {
-		ip = JOptionPane.showInputDialog("Geben sie die ip ein:");
-		String str = JOptionPane.showInputDialog("Geben sie den port ein:");
+		ip = JOptionPane.showInputDialog("Geben sie die ip ein:", "127.0.0.1");
+		String str = JOptionPane.showInputDialog("Geben sie den port ein:", "7777");
 		try {
 			port = Integer.parseInt(str);
 			socket = new Socket(ip, port);

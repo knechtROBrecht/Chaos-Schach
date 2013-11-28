@@ -8,7 +8,6 @@ import java.util.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 
 @SuppressWarnings("serial")
@@ -19,7 +18,6 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	private final int DISTANCE = 3;
 	private final int FIELDCOUNTX = 23;
 	private final int FIELDCOUNTY = 11;
-	private final Point hotSpot = new Point(0, 0);
 
 	private int basePos;
 	private int enemyBasePos;
@@ -33,7 +31,6 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	private ArrayList<GameField> gameFields = new ArrayList<GameField>();
 	private Set<GameField> reachableGameFields = new HashSet<GameField>(),
 			attackableGameFields = new HashSet<GameField>();
-	private Timer time = new Timer(30, this);
 	private GameField clickedField;
 	private Random rand = new Random(20071969);
 	private GameFrame gameFrame;
@@ -79,7 +76,6 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		this.requestFocus();
 		setGameFields();
 		setGamePieces();
-		time.start();
 		defCursor();
 	}
 
@@ -94,12 +90,12 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 			e.printStackTrace();
 		}
 		handCur = Toolkit.getDefaultToolkit().createCustomCursor(handImg,
-				hotSpot, "handCur");
+				new Point(10, 0), "handCur");
 		swordCur = Toolkit.getDefaultToolkit().createCustomCursor(swordImg,
-				hotSpot, "swordCur");
+				new Point(0, 0), "swordCur");
 		feetCur = Toolkit.getDefaultToolkit().createCustomCursor(feetImg,
-				hotSpot, "feetCur");
-		noCur = Toolkit.getDefaultToolkit().createCustomCursor(noImg, hotSpot,
+				new Point(10, 10), "feetCur");
+		noCur = Toolkit.getDefaultToolkit().createCustomCursor(noImg, new Point(10, 10),
 				"noCur");
 	}
 
@@ -383,6 +379,13 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	}
 
 	/**
+	 * @return Gibt den HandCursor zurück
+	 */
+	public Cursor getHandCur() {
+		return handCur;
+	}
+	
+	/**
 	 * @return Gibt zurueck ob man an der Reihe ist
 	 */
 	public boolean getTurn() {
@@ -404,14 +407,9 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	public void addGameFrame(GameFrame gameFrame) {
 		this.gameFrame = gameFrame;
 	}
-
-	@Override
-	public void mouseMoved(MouseEvent event) {
+	
+	private void actCur(MouseEvent event){
 		GameField ngf = nearestField(event);
-		if (ngf.getPiece() != null) {
-			gameFrame.setTextArea(ngf.getPiece().toString(), ngf.getPiece()
-					.getOwner().equals(player));
-		}
 		if (reachableGameFields.contains(ngf)) {
 			setCursor(feetCur);
 		} else if (attackableGameFields.contains(ngf)) {
@@ -425,6 +423,16 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		} else {
 			setCursor(handCur);
 		}
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent event) {
+		GameField ngf = nearestField(event);
+		if (ngf.getPiece() != null) {
+			gameFrame.setTextArea(ngf.getPiece().toString(), ngf.getPiece()
+					.getOwner().equals(player));
+		}
+		actCur(event);
 	}
 
 	@Override
@@ -442,7 +450,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 				this.repaint();
 			}
 		}
-
+		actCur(event);
 	}
 
 	private void firstclick(MouseEvent event) {
@@ -457,7 +465,6 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 			}
 			actGamePiece = clickedField.getPiece();
 		}
-
 	}
 
 	private void secondclick(MouseEvent event) {
@@ -498,13 +505,13 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent arg0) {
-
+	public void mouseEntered(MouseEvent event) {
+		actCur(event);
 	}
 
 	@Override
-	public void mouseExited(MouseEvent arg0) {
-
+	public void mouseExited(MouseEvent event) {
+		actCur(event);
 	}
 
 	@Override
