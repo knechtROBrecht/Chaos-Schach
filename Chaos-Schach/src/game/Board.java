@@ -29,12 +29,14 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	private Cursor handCur, swordCur, feetCur, noCur;
 
 	private ArrayList<GameField> gameFields = new ArrayList<GameField>();
-	private Set<GameField> reachableGameFields = new HashSet<GameField>(),
-			attackableGameFields = new HashSet<GameField>();
+	private HashMap<GameField, Integer> reachableGameFields = new HashMap<GameField, Integer>(),
+			attackableGameFields = new HashMap<GameField, Integer>();
 	private GameField clickedField;
 	private Random rand = new Random(20071969);
 	private GameFrame gameFrame;
 	private GamePiece actGamePiece;
+
+	private int x = 0;
 
 	/**
 	 * @param server
@@ -95,8 +97,8 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 				new Point(0, 0), "swordCur");
 		feetCur = Toolkit.getDefaultToolkit().createCustomCursor(feetImg,
 				new Point(10, 10), "feetCur");
-		noCur = Toolkit.getDefaultToolkit().createCustomCursor(noImg, new Point(10, 10),
-				"noCur");
+		noCur = Toolkit.getDefaultToolkit().createCustomCursor(noImg,
+				new Point(10, 10), "noCur");
 	}
 
 	/**
@@ -174,17 +176,28 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		GamePiece soldier2 = new GamePiece("Server", 1, "Server" == player);
 		gameFields.get(FIELDCOUNTX * FIELDCOUNTY - 3).setPiece(soldier2);
 
-		gameFields.get(100).setPiece(new GamePiece("Server", 2, "Server" == player));
-		gameFields.get(101).setPiece(new GamePiece("Server", 2, "Server" == player));
-		gameFields.get(102).setPiece(new GamePiece("Server", 2, "Server" == player));
-		gameFields.get(103).setPiece(new GamePiece("Server", 2, "Server" == player));
-		gameFields.get(104).setPiece(new GamePiece("Server", 2, "Server" == player));
-		gameFields.get(105).setPiece(new GamePiece("Client", 2, "Client" == player));
-		gameFields.get(106).setPiece(new GamePiece("Client", 2, "Client" == player));
-		gameFields.get(107).setPiece(new GamePiece("Client", 2, "Client" == player));
-		gameFields.get(108).setPiece(new GamePiece("Client", 2, "Client" == player));
-		gameFields.get(109).setPiece(new GamePiece("Client", 2, "Client" == player));
-		gameFields.get(110).setPiece(new GamePiece("Client", 2, "Client" == player));
+		gameFields.get(100).setPiece(
+				new GamePiece("Server", 2, "Server" == player));
+		gameFields.get(101).setPiece(
+				new GamePiece("Server", 2, "Server" == player));
+		gameFields.get(102).setPiece(
+				new GamePiece("Server", 2, "Server" == player));
+		gameFields.get(103).setPiece(
+				new GamePiece("Server", 2, "Server" == player));
+		gameFields.get(104).setPiece(
+				new GamePiece("Server", 2, "Server" == player));
+		gameFields.get(105).setPiece(
+				new GamePiece("Client", 2, "Client" == player));
+		gameFields.get(106).setPiece(
+				new GamePiece("Client", 2, "Client" == player));
+		gameFields.get(107).setPiece(
+				new GamePiece("Client", 2, "Client" == player));
+		gameFields.get(108).setPiece(
+				new GamePiece("Client", 2, "Client" == player));
+		gameFields.get(109).setPiece(
+				new GamePiece("Client", 2, "Client" == player));
+		gameFields.get(110).setPiece(
+				new GamePiece("Client", 2, "Client" == player));
 
 	}
 
@@ -217,7 +230,8 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	 *            und der Besitzer ist player
 	 */
 	public void create(int x, int y, String player, int type) {
-		getGameField(x, y).setPiece(new GamePiece(player, type, player==this.player));
+		getGameField(x, y).setPiece(
+				new GamePiece(player, type, player == this.player));
 		this.repaint();
 	}
 
@@ -267,12 +281,16 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	 * @return Gibt eine Menge mit den von einem bestimmten Spielfeld ueber eine
 	 *         bestimmte Schritteanzahl erreichbarer Spielfelder zurueck
 	 */
-	public Set<GameField> reachableGameFields(GameField gf, int steps) {
-		reachableGameFields.add(gf);
+	public HashMap<GameField, Integer> reachableGameFields(GameField gf,
+			int steps) {
+		reachableGameFields.put(gf, steps);
 		for (GameField tmp : gf.getNeighbors()) {
-			if (tmp.getPiece() == null) {
-				if (steps >= tmp.getDifficulty())
-					reachableGameFields(tmp, steps - tmp.getDifficulty());
+			if (!(reachableGameFields.containsKey(tmp))
+					|| reachableGameFields.get(tmp) <= steps) {
+				if (tmp.getPiece() == null) {
+					if (steps >= tmp.getDifficulty())
+						reachableGameFields(tmp, steps - tmp.getDifficulty());
+				}
 			}
 		}
 		return reachableGameFields;
@@ -284,18 +302,23 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	 * @return Gibt eine Menge mit den von einem bestimmten Spielfeld ueber eine
 	 *         bestimmte Schritteanzahl angreifbarer Spielfelder zurueck
 	 */
-	public Set<GameField> attackableGameFields(GameField gf, int reach) {
-
+	public HashMap<GameField, Integer> attackableGameFields(GameField gf,
+			int reach) {
+		x++;
+		System.out.println(x);
 		for (GameField tmp : gf.getNeighbors()) {
-			if (tmp.getPiece() == null
-					|| (tmp.getPiece() != null && tmp.getPiece().getOwner() == player)) {
-				if (reach > 0)
-					attackableGameFields(tmp, reach - 1);
-			} else if (tmp.getPiece() != null
-					&& tmp.getPiece().getOwner() != player) {
-				if (reach > 0) {
-					attackableGameFields.add(tmp);
-					attackableGameFields(tmp, reach - 1);
+			if (!(attackableGameFields.containsKey(tmp))
+					|| attackableGameFields.get(tmp) <= reach) {
+				if (tmp.getPiece() == null
+						|| (tmp.getPiece() != null && tmp.getPiece().getOwner() == player)) {
+					if (reach > 0)
+						attackableGameFields(tmp, reach - 1);
+				} else if (tmp.getPiece() != null
+						&& tmp.getPiece().getOwner() != player) {
+					if (reach > 0) {
+						attackableGameFields.put(tmp, reach);
+						attackableGameFields(tmp, reach - 1);
+					}
 				}
 			}
 		}
@@ -384,7 +407,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	public Cursor getHandCur() {
 		return handCur;
 	}
-	
+
 	/**
 	 * @return Gibt zurueck ob man an der Reihe ist
 	 */
@@ -407,12 +430,12 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	public void addGameFrame(GameFrame gameFrame) {
 		this.gameFrame = gameFrame;
 	}
-	
-	private void actCur(MouseEvent event){
+
+	private void actCur(MouseEvent event) {
 		GameField ngf = nearestField(event);
-		if (reachableGameFields.contains(ngf)) {
+		if (reachableGameFields.containsKey(ngf)) {
 			setCursor(feetCur);
-		} else if (attackableGameFields.contains(ngf)) {
+		} else if (attackableGameFields.containsKey(ngf)) {
 			setCursor(swordCur);
 		} else if (ngf.getPiece() != null) {
 			if (ngf.getPiece().getOwner() != player) {
@@ -473,7 +496,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 				&& releasedField.getPiece() == null
 				&& clickedField.getPiece() != null) {
 
-			for (GameField gf : reachableGameFields) {
+			for (GameField gf : reachableGameFields.keySet()) {
 				if (gf == releasedField) {
 					output.move(clickedField.getX(), clickedField.getY(),
 							releasedField.getX(), releasedField.getY());
@@ -485,7 +508,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		} else if (!(clickedField.equals(releasedField))
 				&& releasedField.getPiece() != null
 				&& clickedField.getPiece() != null) {
-			for (GameField gf : attackableGameFields) {
+			for (GameField gf : attackableGameFields.keySet()) {
 				if (gf == releasedField) {
 					output.attack(clickedField.getX(), clickedField.getY(),
 							releasedField.getX(), releasedField.getY());
@@ -559,12 +582,12 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 			polygon.addPoint(ex, ey);
 			polygon.addPoint(fx, fy);
 
-			if (this.reachableGameFields.contains(gf)) {
+			if (this.reachableGameFields.containsKey(gf)) {
 				g2.setColor(Color.magenta);
 				g2.fillPolygon(polygon);
 				g2.drawPolygon(polygon);
 			}
-			if (this.attackableGameFields.contains(gf)) {
+			if (this.attackableGameFields.containsKey(gf)) {
 				g2.setColor(Color.red);
 				g2.fillPolygon(polygon);
 				g2.drawPolygon(polygon);

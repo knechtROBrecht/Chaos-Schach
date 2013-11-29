@@ -39,7 +39,7 @@ public class GamePiece {
 						"images/KnightBlue.png");
 				break;
 			case 2:
-				initialize(5, 5, 1, 3, "Archer",
+				initialize(15, 5, 1, 3, "Archer",
 						"images/ArcherBlue.png");
 				break;
 			default:
@@ -57,7 +57,7 @@ public class GamePiece {
 						"images/KnightRed.png");
 				break;
 			case 2:
-				initialize(5, 5, 1, 3, "Archer",
+				initialize(15, 5, 1, 3, "Archer",
 						"images/ArcherRed.png");
 				break;
 			default:

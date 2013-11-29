@@ -33,21 +33,6 @@ public class GameFrame extends JFrame{
 		this.setResizable(false);
 
 		westPanel = new JPanel();
-//		westPanel.addMouseMotionListener(new MouseMotionListener(){
-//
-//			@Override
-//			public void mouseDragged(MouseEvent arg0) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//
-//			@Override
-//			public void mouseMoved(MouseEvent arg0) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//			
-//		});
 		westPanel.setLayout(new BorderLayout());
 		westPanel.setPreferredSize(new Dimension(200, 720));
 		aufgeben = new JButton("Aufgeben");
