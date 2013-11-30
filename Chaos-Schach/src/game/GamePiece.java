@@ -14,6 +14,7 @@ public class GamePiece {
 	private int steps;
 	private int stepsLeft;
 	private int hp;
+	private int maxHp;
 	private int attack;
 	private int reach;
 	private Boolean atk = true;
@@ -81,6 +82,7 @@ public class GamePiece {
 		this.steps = steps;
 		this.stepsLeft = steps;
 		this.hp = hp;
+		this.maxHp = hp;
 		this.attack = attack;
 		this.reach = reach;
 		this.name = name;
@@ -227,6 +229,10 @@ public class GamePiece {
 	 */
 	public void setAtk(Boolean atk) {
 		this.atk = atk;
+	}
+	
+	public int getMaxHp(){
+		return maxHp;
 	}
 
 	public BufferedImage getImg() {

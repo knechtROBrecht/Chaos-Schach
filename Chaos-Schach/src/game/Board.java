@@ -604,6 +604,20 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 				g2.drawImage(gf.getPiece().getImg(), gf.getX()
 						- gf.getPiece().getImg().getWidth() / 2, gf.getY()
 						- gf.getPiece().getImg().getHeight() / 2, null);
+				
+				int length = gf.getPiece().getImg().getWidth();
+				int life = gf.getPiece().getHp() * length / gf.getPiece().getMaxHp();
+				int nolife = length - life;
+				
+				g2.setColor(Color.red);
+				g2.fillRect(life + gf.getX() - gf.getPiece().getImg().getWidth() / 2,
+						gf.getY() - gf.getPiece().getImg().getHeight() / 2, nolife,
+						4);
+				
+				g2.setColor(Color.green);
+				g2.fillRect(gf.getX() - gf.getPiece().getImg().getWidth() / 2,
+						gf.getY() - gf.getPiece().getImg().getHeight() / 2, life,
+						4);
 			}
 		}
 	}
