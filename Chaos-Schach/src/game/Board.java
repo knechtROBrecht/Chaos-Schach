@@ -27,6 +27,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	private boolean turn;
 	private BufferedImage handImg, swordImg, feetImg, noImg;
 	private Cursor handCur, swordCur, feetCur, noCur;
+	private BufferedImage path, grass, forest, mountain, tmp;
 
 	private ArrayList<GameField> gameFields = new ArrayList<GameField>();
 	private HashMap<GameField, Integer> reachableGameFields = new HashMap<GameField, Integer>(),
@@ -111,20 +112,33 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		int mx = width;
 		int my = height;
 		int flag = 0;
+		ClassLoader cldr = this.getClass().getClassLoader();
+		try {
+			path = ImageIO.read(cldr.getResource("images/Path.png"));
+			grass = ImageIO.read(cldr.getResource("images/Grass.png"));
+			forest = ImageIO.read(cldr.getResource("images/Forest.png"));
+			mountain = ImageIO.read(cldr.getResource("images/Mountain.png"));			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		for (int j = 0; j < FIELDCOUNTX; j++) {
 			for (int i = 0; i < FIELDCOUNTY; i++) {
 				int chance = rand.nextInt(100);
 				int fieldtype = 0;
 				if (chance >= 1 && chance < 34) {
 					fieldtype = 0;
+					tmp = path;
 				} else if (chance >= 34 && chance < 67) {
 					fieldtype = 1;
+					tmp = grass;
 				} else if (chance >= 67 && chance < 97) {
 					fieldtype = 2;
+					tmp = forest;
 				} else if (chance >= 97 && chance <= 100) {
 					fieldtype = 3;
+					tmp = mountain;
 				}
-				gameFields.add(new GameField(mx, my, fieldtype));
+				gameFields.add(new GameField(tmp, mx, my, fieldtype));
 				my += height * 2;
 			}
 			if (flag == 0) {
@@ -286,7 +300,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		reachableGameFields.put(gf, steps);
 		for (GameField tmp : gf.getNeighbors()) {
 			if (!(reachableGameFields.containsKey(tmp))
-					|| reachableGameFields.get(tmp) <= steps) {
+					|| reachableGameFields.get(tmp) < steps) {
 				if (tmp.getPiece() == null) {
 					if (steps >= tmp.getDifficulty())
 						reachableGameFields(tmp, steps - tmp.getDifficulty());
@@ -502,6 +516,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 							releasedField.getX(), releasedField.getY());
 					moveGamePiece(clickedField.getX(), clickedField.getY(),
 							releasedField.getX(), releasedField.getY());
+//					gf.getPiece().setStepsLeft(reachableGameFields.get(releasedField)); // wont work yet
 					gf.getPiece().setStepsLeft(0);
 				}
 			}
