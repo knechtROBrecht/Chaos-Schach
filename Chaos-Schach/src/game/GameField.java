@@ -37,7 +37,7 @@ public class GameField {
 		} else if (type == 2) {
 			initialize(Color.white, 3, "Forest", "images/Forest.png");
 		} else if (type == 3) {
-			initialize(Color.white, 999, "Mountain", "images/NoCur.png");
+			initialize(Color.white, 999, "Mountain", "images/Mountain.png");
 		}
 
 	}

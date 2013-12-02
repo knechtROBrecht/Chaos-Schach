@@ -177,9 +177,9 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		gameFields.get(FIELDCOUNTX * FIELDCOUNTY - 3).setPiece(soldier2);
 
 		gameFields.get(100).setPiece(
-				new GamePiece("Server", 2, "Server" == player));
+				new GamePiece("Server", 3, "Server" == player));
 		gameFields.get(101).setPiece(
-				new GamePiece("Server", 2, "Server" == player));
+				new GamePiece("Server", 3, "Server" == player));
 		gameFields.get(102).setPiece(
 				new GamePiece("Server", 2, "Server" == player));
 		gameFields.get(103).setPiece(
@@ -191,9 +191,9 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		gameFields.get(106).setPiece(
 				new GamePiece("Client", 2, "Client" == player));
 		gameFields.get(107).setPiece(
-				new GamePiece("Client", 2, "Client" == player));
+				new GamePiece("Client", 3, "Client" == player));
 		gameFields.get(108).setPiece(
-				new GamePiece("Client", 2, "Client" == player));
+				new GamePiece("Client", 3, "Client" == player));
 		gameFields.get(109).setPiece(
 				new GamePiece("Client", 2, "Client" == player));
 		gameFields.get(110).setPiece(
@@ -239,7 +239,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	 * @return Gibt einen neuen Spielstein von einem zufaelligen Typen zurueck
 	 */
 	public GamePiece randomNewPiece() {
-		return new GamePiece(player, rand.nextInt(2) + 1, true);
+		return new GamePiece(player, rand.nextInt(3) + 1, true);
 	}
 
 	/**
@@ -605,18 +605,18 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 						- gf.getPiece().getImg().getWidth() / 2, gf.getY()
 						- gf.getPiece().getImg().getHeight() / 2, null);
 				
-				int length = gf.getPiece().getImg().getWidth();
+				int length = gf.getPiece().getImg().getWidth() - 4;
 				int life = gf.getPiece().getHp() * length / gf.getPiece().getMaxHp();
 				int nolife = length - life;
 				
 				g2.setColor(Color.red);
-				g2.fillRect(life + gf.getX() - gf.getPiece().getImg().getWidth() / 2,
-						gf.getY() - gf.getPiece().getImg().getHeight() / 2, nolife,
+				g2.fillRect(life + 2 + gf.getX() - gf.getPiece().getImg().getWidth() / 2,
+						gf.getY() - 2 - gf.getPiece().getImg().getHeight() / 2, nolife,
 						4);
 				
 				g2.setColor(Color.green);
-				g2.fillRect(gf.getX() - gf.getPiece().getImg().getWidth() / 2,
-						gf.getY() - gf.getPiece().getImg().getHeight() / 2, life,
+				g2.fillRect(gf.getX() + 2 - gf.getPiece().getImg().getWidth() / 2,
+						gf.getY() - 2 - gf.getPiece().getImg().getHeight() / 2, life,
 						4);
 			}
 		}

@@ -36,12 +36,16 @@ public class GamePiece {
 						"images/CastleBlue.png");
 				break;
 			case 1:
-				initialize(4, 10, 2, 1, "Soldier",
+				initialize(4, 10, 3, 1, "Soldier",
 						"images/KnightBlue.png");
 				break;
 			case 2:
-				initialize(15, 5, 1, 3, "Archer",
+				initialize(5, 5, 1, 3, "Archer",
 						"images/ArcherBlue.png");
+				break;
+			case 3:
+				initialize(10, 8, 2, 1, "Horse",
+						"images/HorseBlue.png");
 				break;
 			default:
 				break;
@@ -54,12 +58,16 @@ public class GamePiece {
 						"images/CastleRed.png");
 				break;
 			case 1:
-				initialize(4, 10, 2, 1, "Soldier",
+				initialize(4, 10, 3, 1, "Soldier",
 						"images/KnightRed.png");
 				break;
 			case 2:
-				initialize(15, 5, 1, 3, "Archer",
+				initialize(5, 5, 1, 3, "Archer",
 						"images/ArcherRed.png");
+				break;
+			case 3:
+				initialize(10, 8, 2, 1, "Horse",
+						"images/HorseRed.png");
 				break;
 			default:
 				break;
