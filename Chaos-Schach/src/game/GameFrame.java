@@ -17,8 +17,7 @@ import javax.swing.WindowConstants;
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame{
 
-	private JButton aufgeben;
-	private JButton turn;
+	private JButton aufgeben, help, turn;
 	private JPanel westPanel;
 	private JLabel conn;
 	private Board board;
@@ -36,7 +35,7 @@ public class GameFrame extends JFrame{
 		westPanel.setLayout(new BorderLayout());
 		westPanel.setPreferredSize(new Dimension(200, 720));
 		aufgeben = new JButton("Aufgeben");
-		aufgeben.setPreferredSize(new Dimension(200, 80));
+		aufgeben.setPreferredSize(new Dimension(200, 50));
 		aufgeben.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (board != null) {
@@ -58,12 +57,20 @@ public class GameFrame extends JFrame{
 				}
 			}
 		});
+		help = new JButton("Help");
+		help.setPreferredSize(new Dimension(200,100));
+		help.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				new HelpScreen();
+			}
+		});
 		textArea = new JTextArea(20, 5);
 		textArea.setEditable(false);
 		JPanel southButtons = new JPanel();
 		southButtons.setLayout(new BorderLayout());
 		southButtons.add(turn, BorderLayout.NORTH);
-		southButtons.add(aufgeben, BorderLayout.CENTER);
+		southButtons.add(help,BorderLayout.CENTER);
+		southButtons.add(aufgeben, BorderLayout.SOUTH);
 		yourTurn = new JLabel();
 		yourTurn.setPreferredSize(new Dimension(200, 200));
 		yourTurn.setOpaque(true);

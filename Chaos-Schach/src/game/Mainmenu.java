@@ -12,7 +12,6 @@ public class Mainmenu extends JFrame {
 	private JButton host;
 	private JButton conn;
 	private JButton tut;
-	private JButton opt;
 
 	/**
 	 * Konstruktor erzeugt die Knoepfe fuer das Startfenster und setzt die
@@ -22,11 +21,12 @@ public class Mainmenu extends JFrame {
 		this.setTitle("Chaos-Schach");
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.setSize(200, 400);
+		this.setResizable(false);
+		
 		panel = new JPanel();
 		host = new JButton("Host a Game");
 		conn = new JButton("Connect to a Game");
 		tut = new JButton("Tutorial");
-		opt = new JButton("Options");
 
 		host.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -44,22 +44,13 @@ public class Mainmenu extends JFrame {
 
 		tut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO tutorial
-				System.out.println("tutorial is pressed");
-			}
-		});
-
-		opt.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// TODO options
-				System.out.println("options is pressed");
+				new HelpScreen();
 			}
 		});
 
 		panel.add(host);
 		panel.add(conn);
 		panel.add(tut);
-		panel.add(opt);
 
 		this.add(panel, BorderLayout.CENTER);
 		this.setVisible(true);
