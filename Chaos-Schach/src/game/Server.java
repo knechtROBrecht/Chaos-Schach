@@ -58,8 +58,6 @@ public class Server implements Runnable {
 			port = Integer.parseInt(str);
 			serverSocket = new ServerSocket(port);
 			socket = serverSocket.accept();
-			System.out.println("Connection from: " + socket.getInetAddress()
-					+ "\n");
 			dout = new DataOutputStream(socket.getOutputStream());
 			din = new DataInputStream(socket.getInputStream());
 			this.frame.addBoard(new Board(this));

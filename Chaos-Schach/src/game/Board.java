@@ -37,7 +37,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	private GameFrame gameFrame;
 	private GamePiece actGamePiece;
 
-	private int x = 0;
+
 
 	/**
 	 * @param server
@@ -295,8 +295,6 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	 */
 	public HashMap<GameField, Integer> attackableGameFields(GameField gf,
 			int reach) {
-		x++;
-		System.out.println(x);
 		for (GameField tmp : gf.getNeighbors()) {
 			if (!(attackableGameFields.containsKey(tmp))
 					|| attackableGameFields.get(tmp) <= reach) {
@@ -453,11 +451,9 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	public void mouseClicked(MouseEvent event) {
 		if (turn) {
 			if (actGamePiece == null) {
-				System.out.println("firstclick");
 				firstclick(event);
 				this.repaint();
 			} else {
-				System.out.println("secondclick");
 				secondclick(event);
 				clickedField = null;
 				actGamePiece = null;
