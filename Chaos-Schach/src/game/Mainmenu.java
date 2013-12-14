@@ -2,6 +2,9 @@ package game;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.swing.*;
 
@@ -41,10 +44,18 @@ public class Mainmenu extends JFrame {
 				new GameFrame("c");
 			}
 		});
-
+		
 		tut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new HelpScreen();
+				try {
+					Desktop.getDesktop().browse(new URI("https://www.youtube.com/watch?v=QiVT7Rb5N7s"));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (URISyntaxException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 

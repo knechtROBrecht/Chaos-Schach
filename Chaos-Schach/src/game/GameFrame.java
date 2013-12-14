@@ -2,9 +2,14 @@ package game;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -61,7 +66,15 @@ public class GameFrame extends JFrame{
 		help.setPreferredSize(new Dimension(200,100));
 		help.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				new HelpScreen();
+				try {
+					Desktop.getDesktop().browse(new URI("https://www.youtube.com/watch?v=QiVT7Rb5N7s"));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (URISyntaxException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		textArea = new JTextArea(20, 5);

@@ -190,29 +190,6 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		GamePiece soldier2 = new GamePiece("Server", 1, "Server" == player);
 		gameFields.get(FIELDCOUNTX * FIELDCOUNTY - 3).setPiece(soldier2);
 
-		gameFields.get(100).setPiece(
-				new GamePiece("Server", 3, "Server" == player));
-		gameFields.get(101).setPiece(
-				new GamePiece("Server", 3, "Server" == player));
-		gameFields.get(102).setPiece(
-				new GamePiece("Server", 2, "Server" == player));
-		gameFields.get(103).setPiece(
-				new GamePiece("Server", 2, "Server" == player));
-		gameFields.get(104).setPiece(
-				new GamePiece("Server", 2, "Server" == player));
-		gameFields.get(105).setPiece(
-				new GamePiece("Client", 2, "Client" == player));
-		gameFields.get(106).setPiece(
-				new GamePiece("Client", 2, "Client" == player));
-		gameFields.get(107).setPiece(
-				new GamePiece("Client", 3, "Client" == player));
-		gameFields.get(108).setPiece(
-				new GamePiece("Client", 3, "Client" == player));
-		gameFields.get(109).setPiece(
-				new GamePiece("Client", 2, "Client" == player));
-		gameFields.get(110).setPiece(
-				new GamePiece("Client", 2, "Client" == player));
-
 	}
 
 	/**
@@ -416,7 +393,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	}
 
 	/**
-	 * @return Gibt den HandCursor zurück
+	 * @return Gibt den HandCursor zurï¿½ck
 	 */
 	public Cursor getHandCur() {
 		return handCur;

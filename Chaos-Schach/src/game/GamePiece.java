@@ -32,7 +32,7 @@ public class GamePiece {
 		if (owned) {
 			switch (type) {
 			case 0:
-				initialize(0, 1, 10, 1, "Base",
+				initialize(0, 20, 1, 3, "Base",
 						"images/CastleBlue.png");
 				break;
 			case 1:
@@ -40,11 +40,11 @@ public class GamePiece {
 						"images/KnightBlue.png");
 				break;
 			case 2:
-				initialize(5, 5, 1, 3, "Archer",
+				initialize(5, 5, 3, 3, "Archer",
 						"images/ArcherBlue.png");
 				break;
 			case 3:
-				initialize(10, 8, 2, 1, "Horse",
+				initialize(10, 8, 3, 1, "Horse",
 						"images/HorseBlue.png");
 				break;
 			default:
@@ -54,7 +54,7 @@ public class GamePiece {
 		if (!owned) {
 			switch (type) {
 			case 0:
-				initialize(0, 1, 10, 1, "Base",
+				initialize(0, 20, 1, 3, "Base",
 						"images/CastleRed.png");
 				break;
 			case 1:
@@ -62,11 +62,11 @@ public class GamePiece {
 						"images/KnightRed.png");
 				break;
 			case 2:
-				initialize(5, 5, 1, 3, "Archer",
+				initialize(5, 5, 3, 3, "Archer",
 						"images/ArcherRed.png");
 				break;
 			case 3:
-				initialize(10, 8, 2, 1, "Horse",
+				initialize(10, 8, 3, 1, "Horse",
 						"images/HorseRed.png");
 				break;
 			default:
