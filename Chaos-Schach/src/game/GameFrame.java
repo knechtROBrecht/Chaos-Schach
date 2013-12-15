@@ -19,8 +19,15 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
+/**
+ * Eine Klasse die das Hauptgebilde des Spiels darstellt und auf dem alle
+ * wichtigen GUI Schaltflächen enthalten sind.
+ * 
+ * @author Bernhof, Diedrich, Graczyk
+ * 
+ */
 @SuppressWarnings("serial")
-public class GameFrame extends JFrame{
+public class GameFrame extends JFrame {
 
 	private JButton aufgeben, help, turn;
 	private JPanel westPanel;
@@ -29,6 +36,13 @@ public class GameFrame extends JFrame{
 	private JTextArea textArea;
 	private JLabel yourTurn;
 
+	/**
+	 * Konstruktor erzeugt die Knoepfe fuer das Gamefenster und setzt die
+	 * jeweiligen ActionListener
+	 * 
+	 * @param opt
+	 *            Gibt an ob es sich um einen Server oder Client handelt.
+	 */
 	GameFrame(String opt) {
 		this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		this.setSize(1280, 720);
@@ -63,11 +77,13 @@ public class GameFrame extends JFrame{
 			}
 		});
 		help = new JButton("Help");
-		help.setPreferredSize(new Dimension(200,100));
-		help.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
+		help.setPreferredSize(new Dimension(200, 100));
+		help.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				try {
-					Desktop.getDesktop().browse(new URI("https://www.youtube.com/watch?v=QiVT7Rb5N7s"));
+					Desktop.getDesktop()
+							.browse(new URI(
+									"https://www.youtube.com/watch?v=QiVT7Rb5N7s"));
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -82,7 +98,7 @@ public class GameFrame extends JFrame{
 		JPanel southButtons = new JPanel();
 		southButtons.setLayout(new BorderLayout());
 		southButtons.add(turn, BorderLayout.NORTH);
-		southButtons.add(help,BorderLayout.CENTER);
+		southButtons.add(help, BorderLayout.CENTER);
 		southButtons.add(aufgeben, BorderLayout.SOUTH);
 		yourTurn = new JLabel();
 		yourTurn.setPreferredSize(new Dimension(200, 200));
@@ -112,9 +128,10 @@ public class GameFrame extends JFrame{
 	}
 
 	/**
+	 * Fuegt dem GameFrame das Board hinzu und dem Board das GameFrame
+	 * 
 	 * @param board
-	 *            Fuegt dem GameFrame das Board hinzu und dem Board das
-	 *            GameFrame
+	 * 
 	 */
 	public void addBoard(Board board) {
 		this.board = board;
@@ -127,15 +144,13 @@ public class GameFrame extends JFrame{
 	}
 
 	/**
-	 * Laeuft bis der Thread interrupted wird und ist fuer das Erzeugen des
-	 * gesamten Spielemenues zustaendig (Turn Button, Surrender Button etc.)
-	 */
-	
-
-	/**
+	 * Schreibt in die TextArea ueber welchen Spielstein die Maus gerade hovered
+	 * 
 	 * @param str
+	 *            Alle wichtigen Eigenschaften eines Spielsteins
 	 * @param bl
-	 * Schreibt in die TextArea ueber welche Spielfigur die Maus gerade hovered
+	 *            Angabe ob es sich um einen eigenen Spielstein handelt
+	 * 
 	 */
 	public void setTextArea(String str, Boolean bl) {
 		textArea.setText("");
@@ -150,7 +165,7 @@ public class GameFrame extends JFrame{
 	}
 
 	/**
-	 * Zeigt an wer an der Reihe ist
+	 * Wechselt und zeigt an wer an der Reihe ist
 	 */
 	public void changeTurnStatus() {
 		if (board.getTurn()) {

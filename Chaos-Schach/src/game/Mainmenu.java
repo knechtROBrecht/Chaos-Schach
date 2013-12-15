@@ -8,6 +8,13 @@ import java.net.URISyntaxException;
 
 import javax.swing.*;
 
+/**
+ * 
+ * Eine Klasse die das Hauptmenue des Programms darstellt.
+ * 
+ * @author Bernhof, Diedrich, Graczyk
+ * 
+ */
 @SuppressWarnings("serial")
 public class Mainmenu extends JFrame {
 
@@ -25,7 +32,7 @@ public class Mainmenu extends JFrame {
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.setSize(200, 400);
 		this.setResizable(false);
-		
+
 		panel = new JPanel();
 		host = new JButton("Host a Game");
 		conn = new JButton("Connect to a Game");
@@ -44,11 +51,13 @@ public class Mainmenu extends JFrame {
 				new GameFrame("c");
 			}
 		});
-		
+
 		tut.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Desktop.getDesktop().browse(new URI("https://www.youtube.com/watch?v=QiVT7Rb5N7s"));
+					Desktop.getDesktop()
+							.browse(new URI(
+									"https://www.youtube.com/watch?v=QiVT7Rb5N7s"));
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -67,6 +76,11 @@ public class Mainmenu extends JFrame {
 		this.setVisible(true);
 	}
 
+	/**
+	 * Hauptprogramm
+	 * 
+	 * @param args Kommandozeilenparameter 
+	 */
 	public static void main(String[] args) {
 		new Mainmenu();
 	}

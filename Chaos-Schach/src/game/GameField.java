@@ -3,6 +3,14 @@ package game;
 import java.awt.image.BufferedImage;
 import java.util.*;
 
+/**
+ * Ein Spielfeld mit verschiedenen Eigenschaften um eine unterschiedliche
+ * Struktur des gesamten Spieles erzeugen zu können. Das Spielfeld hat einen
+ * eigenen Typ und auf dem Spielfeld kann ein Spielstein vorhanden sein.
+ * 
+ * @author Bernhof, Diedrich, Graczyk
+ * 
+ */
 public class GameField {
 
 	private Set<GameField> neighbors = new HashSet<GameField>();
@@ -13,36 +21,33 @@ public class GameField {
 	private BufferedImage img;
 
 	/**
+	 * Konstruktor ruft die initialize Methode mit den zum Typ passenden
+	 * Parametern auf.
+	 * 
+	 * @param img
+	 *            Das Bild fuer das Spielfeld
 	 * @param x
+	 *            x-Koordinate des Spielfeld
 	 * @param y
+	 *            y-Koordinate des Spielfeld
 	 * @param type
-	 *            Konstruktor ruft die initialize Methode mit den zum Typ
-	 *            passenden Parametern auf.
+	 *            Gibt an um welchen Feldtyp es sich handelt
+	 * 
 	 */
 	public GameField(BufferedImage img, int x, int y, int type) {
 		this.x = x;
 		this.y = y;
+		this.img = img;
 		if (type == 0) {
-			initialize(img, 1);
+			this.difficulty = 1;
 		} else if (type == 1) {
-			initialize(img, 2);
+			this.difficulty = 2;
 		} else if (type == 2) {
-			initialize(img, 3);
+			this.difficulty = 3;
 		} else if (type == 3) {
-			initialize(img, 999);
+			this.difficulty = 999;
 		}
 
-	}
-
-	/**
-	 * @param color
-	 * @param difficulty
-	 * @param name
-	 *            Hilfsmethode des Konstruktors zum Festlegen bestimmter Werte
-	 */
-	private void initialize(BufferedImage img, int difficulty) {
-		this.difficulty = difficulty;
-		this.img = img;
 	}
 
 	/**
@@ -69,8 +74,10 @@ public class GameField {
 	}
 
 	/**
-	 * @param gp
-	 *            Setzt ein GamePiece auf das GameField
+	 * Setzt ein GamePiece auf das GameField
+	 * 
+	 * @param gp Spielstein der auf dieses Spielfeld gesetzt werden soll.
+	 *            
 	 */
 	public void setPiece(GamePiece gp) {
 		gamePiece = gp;
@@ -85,8 +92,10 @@ public class GameField {
 	}
 
 	/**
-	 * @param gf
-	 *            fügt ein Nachbarfeld hinzu
+	 * Fuegt ein Nachbarfeld hinzu
+	 * 
+	 * @param gf Das spezifische Nachbarfeld
+	 *            
 	 */
 	public void addNeighbor(GameField gf) {
 		neighbors.add(gf);
@@ -98,9 +107,16 @@ public class GameField {
 	public Set<GameField> getNeighbors() {
 		return neighbors;
 	}
+	
+	/**
+	 * @return Gibt das Bild des Spielfelds zurueck
+	 */
+	public BufferedImage getImg() {
+		return img;
+	}
 
 	/**
-	 * @param gf
+	 * @param gf das zu vergleichende Spielfeld
 	 * @return boolean Prueft ob die GameFields inhaltsgleich sind
 	 */
 	public boolean equals(GameField gf) {
@@ -108,10 +124,6 @@ public class GameField {
 			return true;
 		}
 		return false;
-	}
-
-	public BufferedImage getImg() {
-		return img;
 	}
 
 }

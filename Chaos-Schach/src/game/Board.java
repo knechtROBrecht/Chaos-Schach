@@ -10,6 +10,14 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 
+/**
+ * Eine Klasse die das gesamte Spiel regelt. In Ihr befinden sich alle noetigen
+ * Eigenschaften und Methoden zum spielen vom Spiel.
+ * 
+ * 
+ * @author Bernhof, Diedrich, Graczyk
+ * 
+ */
 @SuppressWarnings("serial")
 public class Board extends JPanel implements MouseInputListener, ActionListener {
 
@@ -37,11 +45,11 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	private GameFrame gameFrame;
 	private GamePiece actGamePiece;
 
-
-
 	/**
+	 * Konstruktor des Boards fuer den Server
+	 * 
 	 * @param server
-	 *            Konstruktor des Boards fuer den Server
+	 * 
 	 */
 	Board(Server server) {
 		player = "Server";
@@ -54,8 +62,10 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	}
 
 	/**
+	 * Konstruktor des Boards fuer den Client
+	 * 
 	 * @param client
-	 *            Konstruktor des Boards fuer den Client
+	 * 
 	 */
 	Board(Client client) {
 		player = "Client";
@@ -82,6 +92,10 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		defCursor();
 	}
 
+	/**
+	 * Eine Methode welche die unterschiedlichen Cursor mit den Bildern erstellt
+	 * die das Spiel benutzt
+	 */
 	private void defCursor() {
 		ClassLoader cldr = this.getClass().getClassLoader();
 		try {
@@ -104,7 +118,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 
 	/**
 	 * Erzeugt die einzelnen Spielfelder mit einem zufaelligen Typen. Schafft
-	 * auï¿½erdem direkt die Nachbarverbindungen der Spielfelder
+	 * außerdem direkt die Nachbarverbindungen der Spielfelder
 	 */
 	public void setGameFields() {
 		int height = FIELDHEIGHT;
@@ -117,7 +131,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 			path = ImageIO.read(cldr.getResource("images/Path.png"));
 			grass = ImageIO.read(cldr.getResource("images/Grass.png"));
 			forest = ImageIO.read(cldr.getResource("images/Forest.png"));
-			mountain = ImageIO.read(cldr.getResource("images/Mountain.png"));			
+			mountain = ImageIO.read(cldr.getResource("images/Mountain.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -213,12 +227,18 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	}
 
 	/**
+	 * Erzeugt einen neuen Spielstein an der Stelle x,y vom Typ type und der
+	 * Besitzer ist player
+	 * 
 	 * @param x
+	 *            x-Koordinate des Spielsteins
 	 * @param y
+	 *            y-Koordinate des Spielsteins
 	 * @param player
+	 *            Besitzer des Spielsteins
 	 * @param type
-	 *            Erzeugt eine neue Spielfigur an der Stelle x,y vom Typ type
-	 *            und der Besitzer ist player
+	 *            Typ des Spielsteins
+	 * 
 	 */
 	public void create(int x, int y, String player, int type) {
 		getGameField(x, y).setPiece(
@@ -235,7 +255,9 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 
 	/**
 	 * @param x
+	 *            x-Koordinate des zu findenden Spielfelds
 	 * @param y
+	 *            y-Koordinate des zu findenden Spielfelds
 	 * @return Gibt das Spielfeld an der Position x,y zurueck
 	 */
 	public GameField getGameField(int x, int y) {
@@ -250,7 +272,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 
 	/**
 	 * @param event
-	 * @return Gibt das vom Mausclick am wenigsten entfernte Spielfeld zurueck
+	 * @return Gibt das vom Mausevent am wenigsten entfernte Spielfeld zurueck
 	 */
 	public GameField nearestField(MouseEvent event) {
 		GameField nearestGameField = gameFields.get(0);
@@ -267,13 +289,15 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	}
 
 	/**
+	 * Erstellt rekursiv die Menge von erreichbaren Spielfeldern mit Hilfe eines
+	 * Startfeldes und der Bewegungsreichweite
+	 * 
 	 * @param gf
+	 *            momentan zu ueberpruefende Gamefield
 	 * @param steps
-	 * @return Gibt eine Menge mit den von einem bestimmten Spielfeld ueber eine
-	 *         bestimmte Schritteanzahl erreichbarer Spielfelder zurueck
+	 *            Anzahl der restlichen steps
 	 */
-	public HashMap<GameField, Integer> reachableGameFields(GameField gf,
-			int steps) {
+	public void reachableGameFields(GameField gf, int steps) {
 		reachableGameFields.put(gf, steps);
 		for (GameField tmp : gf.getNeighbors()) {
 			if (!(reachableGameFields.containsKey(tmp))
@@ -284,17 +308,18 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 				}
 			}
 		}
-		return reachableGameFields;
 	}
 
 	/**
+	 * Erstellt rekursiv die Menge von angreifbaren Spielfeldern mit Hilfe eines
+	 * Startfeldes und der Angriffsreichweite
+	 * 
 	 * @param gf
+	 *            momentan zu ueberpruefende Gamefield
 	 * @param steps
-	 * @return Gibt eine Menge mit den von einem bestimmten Spielfeld ueber eine
-	 *         bestimmte Schritteanzahl angreifbarer Spielfelder zurueck
+	 *            Anzahl der restlichen steps
 	 */
-	public HashMap<GameField, Integer> attackableGameFields(GameField gf,
-			int reach) {
+	public void attackableGameFields(GameField gf, int reach) {
 		for (GameField tmp : gf.getNeighbors()) {
 			if (!(attackableGameFields.containsKey(tmp))
 					|| attackableGameFields.get(tmp) <= reach) {
@@ -311,16 +336,21 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 				}
 			}
 		}
-		return attackableGameFields;
 	}
 
 	/**
+	 * Spielstein an der Position xAlt, yAlt greift Spielstein an der Position
+	 * xNeu, yNeu an
+	 * 
 	 * @param xAlt
+	 *            x-Koordinate der angreifenden Figur
 	 * @param yAlt
+	 *            y-Koordinate der angreifenden Figur
 	 * @param xNeu
+	 *            x-Koordinate der anzugreifenden Figur
 	 * @param yNeu
-	 *            Spielstein an der Position xAlt, yAlt greift Spielstein an der
-	 *            Position xNeu, yNeu an
+	 *            y-Koordinate der anzugreifenden Figur
+	 * 
 	 */
 	public void attack(int xAlt, int yAlt, int xNeu, int yNeu) {
 		if (getGameField(xNeu, yNeu).getPiece().getHp() <= getGameField(xAlt,
@@ -337,6 +367,19 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		this.repaint();
 	}
 
+	/**
+	 * Verschiebt einen Spielstein auf dem Spielfeld
+	 * 
+	 * @param xAlt
+	 *            x-Koordinate vom alten Standpunkt der zu ziehenden Figur
+	 * @param yAlt
+	 *            y-Koordinate vom alten Standpunkt der zu ziehenden Figur
+	 * @param xNeu
+	 *            x-Koordinate vom neuen Standpunkt der zu ziehenden Figur
+	 * @param yNeu
+	 *            y-Koordinate vom neuen Standpunkt der zu ziehenden Figur
+	 * 
+	 */
 	public void moveGamePiece(int xAlt, int yAlt, int xNeu, int yNeu) {
 		getGameField(xNeu, yNeu).setPiece(getGameField(xAlt, yAlt).getPiece());
 		getGameField(xAlt, yAlt).setPiece(null);
@@ -369,11 +412,15 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	public void win() {
 		output.win();
 		JOptionPane.showMessageDialog(null,
-				"Gegnerische Basis zerstï¿½rt \nSie haben das Spiel gewonnen!",
+				"Gegnerische Basis zerstoert \nSie haben das Spiel gewonnen!",
 				"Gewonnen", JOptionPane.WARNING_MESSAGE);
 		System.exit(0);
 	}
 
+	/**
+	 * Resettet bei allen Spielsteinen die Werte fuer die Reichweite und ob
+	 * diese angriffsberechtigt sind
+	 */
 	public void resetStatus() {
 		for (GameField gf : gameFields) {
 			if (gf.getPiece() != null) {
@@ -391,7 +438,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	}
 
 	/**
-	 * @return Gibt den HandCursor zurï¿½ck
+	 * @return Gibt den HandCursor zurueck
 	 */
 	public Cursor getHandCur() {
 		return handCur;
@@ -405,21 +452,28 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	}
 
 	/**
+	 * Setzt ob man an der Reihe ist
+	 * 
 	 * @param turn
-	 *            Setzt ob man an der Reihe ist
 	 */
 	public void setTurn(boolean turn) {
 		this.turn = turn;
 	}
 
 	/**
+	 * Fuegt GameFrame zum Board hinzu
+	 * 
 	 * @param gameFrame
-	 *            Fuegt GameFrame zum Board hinzu
 	 */
 	public void addGameFrame(GameFrame gameFrame) {
 		this.gameFrame = gameFrame;
 	}
 
+	/**
+	 * Veraendert den Cursor je nachdem bei welchem Mausevent das Spiel gerade ist
+	 * 
+	 * @param event
+	 */
 	private void actCur(MouseEvent event) {
 		GameField ngf = nearestField(event);
 		if (reachableGameFields.containsKey(ngf)) {
@@ -463,20 +517,30 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 		actCur(event);
 	}
 
+	/**
+	 * Bearbeitet den ersten Klick der Maus auf dem Spielfeld
+	 * 
+	 * @param event
+	 */
 	private void firstclick(MouseEvent event) {
 		clickedField = nearestField(event);
 		if (clickedField.getPiece() != null
 				&& clickedField.getPiece().getOwner().equals(player)) {
-			reachableGameFields = reachableGameFields(clickedField,
-					clickedField.getPiece().getStepsLeft());
+			reachableGameFields(clickedField, clickedField.getPiece()
+					.getStepsLeft());
 			if (clickedField.getPiece().getAtk()) {
-				attackableGameFields = attackableGameFields(clickedField,
-						clickedField.getPiece().getReach());
+				attackableGameFields(clickedField, clickedField.getPiece()
+						.getReach());
 			}
 			actGamePiece = clickedField.getPiece();
 		}
 	}
 
+	/**
+	 * Bearbeitet den zweiten Klick der Maus auf dem Spielfeld
+	 * 
+	 * @param event
+	 */
 	private void secondclick(MouseEvent event) {
 		GameField releasedField = nearestField(event);
 		if (!(clickedField.equals(releasedField))
@@ -489,7 +553,8 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 							releasedField.getX(), releasedField.getY());
 					moveGamePiece(clickedField.getX(), clickedField.getY(),
 							releasedField.getX(), releasedField.getY());
-//					gf.getPiece().setStepsLeft(reachableGameFields.get(releasedField)); // wont work yet
+					// gf.getPiece().setStepsLeft(reachableGameFields.get(releasedField));
+					// // wont work yet
 					gf.getPiece().setStepsLeft(0);
 				}
 			}
@@ -592,20 +657,21 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 				g2.drawImage(gf.getPiece().getImg(), gf.getX()
 						- gf.getPiece().getImg().getWidth() / 2, gf.getY()
 						- gf.getPiece().getImg().getHeight() / 2, null);
-				
+
 				int length = gf.getPiece().getImg().getWidth() - 4;
-				int life = gf.getPiece().getHp() * length / gf.getPiece().getMaxHp();
+				int life = gf.getPiece().getHp() * length
+						/ gf.getPiece().getMaxHp();
 				int nolife = length - life;
-				
+
 				g2.setColor(Color.red);
-				g2.fillRect(life + 2 + gf.getX() - gf.getPiece().getImg().getWidth() / 2,
-						gf.getY() - 2 - gf.getPiece().getImg().getHeight() / 2, nolife,
-						4);
-				
+				g2.fillRect(life + 2 + gf.getX()
+						- gf.getPiece().getImg().getWidth() / 2, gf.getY() - 2
+						- gf.getPiece().getImg().getHeight() / 2, nolife, 4);
+
 				g2.setColor(Color.green);
-				g2.fillRect(gf.getX() + 2 - gf.getPiece().getImg().getWidth() / 2,
-						gf.getY() - 2 - gf.getPiece().getImg().getHeight() / 2, life,
-						4);
+				g2.fillRect(gf.getX() + 2 - gf.getPiece().getImg().getWidth()
+						/ 2, gf.getY() - 2 - gf.getPiece().getImg().getHeight()
+						/ 2, life, 4);
 			}
 		}
 	}
