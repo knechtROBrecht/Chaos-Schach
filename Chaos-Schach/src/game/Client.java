@@ -9,6 +9,12 @@ import java.net.UnknownHostException;
 
 import javax.swing.JOptionPane;
 
+/**
+ * Eine Klasse um die Verbindung zwischen zwei Spielern herzustellen.
+ * 
+ * @author Bernhof, Diedrich, Graczyk
+ * 
+ */
 public class Client {
 
 	private Socket socket;
@@ -18,13 +24,17 @@ public class Client {
 	private int port;
 
 	/**
+	 * Konstruktor, der versucht eine Verbindung zu einzugebener IP herzustellen
+	 * um dann In- und Output Streams zu initializieren und dann das Board dem
+	 * Frame hinzufuegt.
+	 * 
 	 * @param frame
-	 *            Konstruktor, der In- und Output Streams initializiert und das
-	 *            Board dem Frame hinzufuegt.
+	 * 
 	 */
 	Client(GameFrame frame) {
 		ip = JOptionPane.showInputDialog("Geben sie die ip ein:", "127.0.0.1");
-		String str = JOptionPane.showInputDialog("Geben sie den port ein:", "7777");
+		String str = JOptionPane.showInputDialog("Geben sie den port ein:",
+				"7777");
 		try {
 			port = Integer.parseInt(str);
 			socket = new Socket(ip, port);

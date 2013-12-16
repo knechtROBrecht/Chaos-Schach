@@ -5,15 +5,25 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
+/**
+ * 
+ * Eine Klasse welche die einkommenden Befehle des anderen Spielers über den
+ * Output verarbeiten und auf dem Board die passenden Methoden aufruft
+ * 
+ * @author Bernhof, Diedrich, Graczyk
+ * 
+ */
 public class Input implements Runnable {
 	private DataInputStream din;
 	private Board board;
 	private Boolean end = false;
 
 	/**
+	 * Konstruktor fuer Server-Input
+	 * 
 	 * @param server
 	 * @param board
-	 *            Konstruktor fuer Server-Input
+	 * 
 	 */
 	Input(Server server, Board board) {
 		din = server.getDis();
@@ -22,9 +32,11 @@ public class Input implements Runnable {
 	}
 
 	/**
+	 * Konstruktor fuer Client-Input
+	 * 
 	 * @param client
 	 * @param board
-	 *            Konstruktor fuer Client-Input
+	 * 
 	 */
 	Input(Client client, Board board) {
 		din = client.getDis();
@@ -51,13 +63,15 @@ public class Input implements Runnable {
 	}
 
 	/**
-	 * @param str
-	 *            Interpretiert den uebergeben String je nachdem ob es sich um
-	 *            einen Rundenwechsel eine Spielfigurbewegung einen Angriff oder
-	 *            sonst eine Handlung handelt, welche Cliend und Server
-	 *            betrifft, und ruft die entsprechenden Methoden auf
+	 * Interpretiert den uebergeben String je nachdem ob es sich um einen
+	 * Rundenwechsel eine Spielfigurbewegung einen Angriff oder sonst eine
+	 * Handlung handelt, welche Client und Server betrifft, und ruft die
+	 * entsprechenden Methoden auf
+	 * 
+	 * @param str der Befehlsstring der verarbeitet und interpretiert werden soll.
+	 * 
 	 */
-	public void interprete(String str) {
+	private void interprete(String str) {
 		if (str.matches("t")) {
 			board.setTurn(true);
 			board.changeTurnStatus();

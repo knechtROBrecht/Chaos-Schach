@@ -13,6 +13,12 @@ import java.net.URL;
 
 import javax.swing.JOptionPane;
 
+/**
+ * Eine Klasse um die Verbindung zwischen zwei Spielern herzustellen.
+ * 
+ * @author Bernhof, Diedrich, Graczyk
+ * 
+ */
 public class Server implements Runnable {
 
 	private ServerSocket serverSocket;
@@ -23,27 +29,13 @@ public class Server implements Runnable {
 	private int port;
 
 	/**
+	 * Erstellt einen Server mit einem GameFrame
+	 * 
 	 * @param frame
-	 * @throws Exception
-	 *             Konstruktor, der In- und Output Streams initializiert und das
-	 *             Board dem Frame hinzufuegt.
+	 * 
 	 */
 	Server(GameFrame frame) {
 		this.frame = frame;
-	}
-
-	/**
-	 * @return Gibt den Output Stream zurueck
-	 */
-	public DataOutputStream getDos() {
-		return dout;
-	}
-
-	/**
-	 * @return Gibt den Input Stream zurueck
-	 */
-	public DataInputStream getDis() {
-		return din;
 	}
 
 	@Override
@@ -74,6 +66,20 @@ public class Server implements Runnable {
 					"Abbruch", JOptionPane.WARNING_MESSAGE);
 			System.exit(0);
 		}
+	}
+
+	/**
+	 * @return Gibt den Output Stream zurueck
+	 */
+	public DataOutputStream getDos() {
+		return dout;
+	}
+
+	/**
+	 * @return Gibt den Input Stream zurueck
+	 */
+	public DataInputStream getDis() {
+		return din;
 	}
 
 }
