@@ -120,7 +120,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	 * Erzeugt die einzelnen Spielfelder mit einem zufaelligen Typen. Schafft
 	 * auﬂerdem direkt die Nachbarverbindungen der Spielfelder
 	 */
-	public void setGameFields() {
+	private void setGameFields() {
 		int height = FIELDHEIGHT;
 		int width = FIELDWIDTH;
 		int mx = width;
@@ -193,7 +193,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	 * Setzt in das obere linke und das untere rechte Eck des Spielfeldes die
 	 * Basis Steine und bereits einen Soldaten
 	 */
-	public void setGamePieces() {
+	private void setGamePieces() {
 		GamePiece base1 = new GamePiece("Client", 0, "Client" == player);
 		gameFields.get(1).setPiece(base1);
 		GamePiece soldier1 = new GamePiece("Client", 1, "Client" == player);
@@ -249,7 +249,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	/**
 	 * @return Gibt einen neuen Spielstein von einem zufaelligen Typen zurueck
 	 */
-	public GamePiece randomNewPiece() {
+	private GamePiece randomNewPiece() {
 		return new GamePiece(player, rand.nextInt(3) + 1, true);
 	}
 
@@ -260,7 +260,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	 *            y-Koordinate des zu findenden Spielfelds
 	 * @return Gibt das Spielfeld an der Position x,y zurueck
 	 */
-	public GameField getGameField(int x, int y) {
+	private GameField getGameField(int x, int y) {
 		for (GameField gf : gameFields) {
 
 			if (gf.getX() == x && gf.getY() == y) {
@@ -274,7 +274,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	 * @param event
 	 * @return Gibt das vom Mausevent am wenigsten entfernte Spielfeld zurueck
 	 */
-	public GameField nearestField(MouseEvent event) {
+	private GameField nearestField(MouseEvent event) {
 		GameField nearestGameField = gameFields.get(0);
 		for (GameField gf : gameFields) {
 			if ((Math.sqrt(Math.pow((gf.getX() - event.getX()), 2)
@@ -297,7 +297,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	 * @param steps
 	 *            Anzahl der restlichen steps
 	 */
-	public void reachableGameFields(GameField gf, int steps) {
+	private void reachableGameFields(GameField gf, int steps) {
 		reachableGameFields.put(gf, steps);
 		for (GameField tmp : gf.getNeighbors()) {
 			if (!(reachableGameFields.containsKey(tmp))
@@ -319,7 +319,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	 * @param steps
 	 *            Anzahl der restlichen steps
 	 */
-	public void attackableGameFields(GameField gf, int reach) {
+	private void attackableGameFields(GameField gf, int reach) {
 		for (GameField tmp : gf.getNeighbors()) {
 			if (!(attackableGameFields.containsKey(tmp))
 					|| attackableGameFields.get(tmp) <= reach) {
@@ -421,7 +421,7 @@ public class Board extends JPanel implements MouseInputListener, ActionListener 
 	 * Resettet bei allen Spielsteinen die Werte fuer die Reichweite und ob
 	 * diese angriffsberechtigt sind
 	 */
-	public void resetStatus() {
+	private void resetStatus() {
 		for (GameField gf : gameFields) {
 			if (gf.getPiece() != null) {
 				gf.getPiece().setStepsLeft(gf.getPiece().getSteps());

@@ -71,7 +71,7 @@ public class Input implements Runnable {
 	 * @param str der Befehlsstring der verarbeitet und interpretiert werden soll.
 	 * 
 	 */
-	public void interprete(String str) {
+	private void interprete(String str) {
 		if (str.matches("t")) {
 			board.setTurn(true);
 			board.changeTurnStatus();
